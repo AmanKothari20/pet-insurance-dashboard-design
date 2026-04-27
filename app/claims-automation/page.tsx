@@ -93,7 +93,7 @@ const topKPIs = [
   },
   {
     id: "processing-time",
-    title: "Avg Processing Time (P50)",
+    title: "Claims Processing Time",
     value: "2.3",
     unit: "min",
     delta: "-0.8",
@@ -839,7 +839,7 @@ export default function ClaimsAutomationDashboard() {
                         <th className="text-right py-2 px-2 font-bold text-[#000000] whitespace-nowrap">Invoice</th>
                         <th className="text-right py-2 px-2 font-bold text-[#000000] whitespace-nowrap">Approved</th>
                         <th className="text-center py-2 px-2 font-bold text-[#000000] whitespace-nowrap">STP Status</th>
-                        <th className="text-center py-2 px-2 font-bold text-[#000000] whitespace-nowrap">Proc. Time</th>
+                        <th className="text-center py-2 px-2 font-bold text-[#000000] whitespace-nowrap">Claims Proc. Time</th>
                         <th className="text-center py-2 px-2 font-bold text-[#000000] whitespace-nowrap">OCR Conf.</th>
                         <th className="text-left py-2 px-2 font-bold text-[#000000] whitespace-nowrap">Region</th>
                       </tr>
@@ -951,7 +951,7 @@ export default function ClaimsAutomationDashboard() {
                         <th className="text-left py-2 px-3 font-bold text-[#000000]">MGA Name</th>
                         <th className="text-right py-2 px-3 font-bold text-[#000000]">Total Claims</th>
                         <th className="text-center py-2 px-3 font-bold text-[#000000]">STP Rate</th>
-                        <th className="text-center py-2 px-3 font-bold text-[#000000]">Avg Proc. Time</th>
+                        <th className="text-center py-2 px-3 font-bold text-[#000000]">Claims Proc. Time</th>
                         <th className="text-center py-2 px-3 font-bold text-[#000000]">OCR Success</th>
                         <th className="text-center py-2 px-3 font-bold text-[#000000]">Override Rate</th>
                         <th className="text-right py-2 px-3 font-bold text-[#000000]">Revenue</th>
