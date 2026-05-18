@@ -48,7 +48,59 @@ import {
   PieChart as PieChartIcon,
 } from "lucide-react"
 
-// ==================== SAMPLE DATA ====================
+// ==================== KPI DATA ====================
+const topKPIs = [
+  {
+    id: "fte-savings",
+    title: "FTE Savings (Total)",
+    value: "14.5",
+    unit: "FTEs",
+    delta: "+2.3",
+    deltaPercent: "+18.8%",
+    trend: "up",
+    icon: <Users className="w-5 h-5" />,
+  },
+  {
+    id: "total-revenue",
+    title: "Total Revenue",
+    value: "$2.4M",
+    unit: "",
+    delta: "+$320K",
+    deltaPercent: "+15.4%",
+    trend: "up",
+    icon: <DollarSign className="w-5 h-5" />,
+  },
+  {
+    id: "processing-time",
+    title: "Claims Processing Time",
+    value: "2.3",
+    unit: "min",
+    delta: "-0.8",
+    deltaPercent: "-25.8%",
+    trend: "down",
+    icon: <Clock className="w-5 h-5" />,
+  },
+  {
+    id: "stp-rate",
+    title: "STP Rate",
+    value: "78.4",
+    unit: "%",
+    delta: "+4.2",
+    deltaPercent: "+5.7%",
+    trend: "up",
+    icon: <Zap className="w-5 h-5" />,
+  },
+  {
+    id: "ocr-success",
+    title: "OCR Success Rate",
+    value: "94.2",
+    unit: "%",
+    delta: "+1.8",
+    deltaPercent: "+1.9%",
+    trend: "up",
+    icon: <CheckCircle2 className="w-5 h-5" />,
+  },
+]
 
 // Global Filters Data
 const mgaOptions = [
@@ -546,15 +598,20 @@ export default function PowerBIReport() {
                   <table className="w-full text-xs">
                     <thead>
                       <tr className="border-b-2 border-[#F57418] bg-[#FEF3E7]">
-                        <th className="text-left py-2 px-3 font-bold text-[#000000]">Claim ID</th>
-                        <th className="text-left py-2 px-3 font-bold text-[#000000]">MGA / SoR</th>
-                        <th className="text-left py-2 px-3 font-bold text-[#000000]">Product</th>
-                        <th className="text-center py-2 px-3 font-bold text-[#000000]">Proc. Time (ms)</th>
-                        <th className="text-center py-2 px-3 font-bold text-[#000000]">Status</th>
-                        <th className="text-left py-2 px-3 font-bold text-[#000000]">Override Type</th>
-                        <th className="text-right py-2 px-3 font-bold text-[#000000]">Variance</th>
-                        <th className="text-center py-2 px-3 font-bold text-[#000000]">Fraud</th>
-                        <th className="text-center py-2 px-3 font-bold text-[#000000]">Audit Trail</th>
+                        <th className="text-left py-2 px-2 font-bold text-[#000000] whitespace-nowrap">Claim ID</th>
+                        <th className="text-left py-2 px-2 font-bold text-[#000000] whitespace-nowrap">Date</th>
+                        <th className="text-left py-2 px-2 font-bold text-[#000000] whitespace-nowrap">MGA</th>
+                        <th className="text-left py-2 px-2 font-bold text-[#000000] whitespace-nowrap">Pet Name</th>
+                        <th className="text-left py-2 px-2 font-bold text-[#000000] whitespace-nowrap">Species</th>
+                        <th className="text-left py-2 px-2 font-bold text-[#000000] whitespace-nowrap">Breed</th>
+                        <th className="text-left py-2 px-2 font-bold text-[#000000] whitespace-nowrap">Type</th>
+                        <th className="text-left py-2 px-2 font-bold text-[#000000] whitespace-nowrap">Product</th>
+                        <th className="text-right py-2 px-2 font-bold text-[#000000] whitespace-nowrap">Invoice</th>
+                        <th className="text-right py-2 px-2 font-bold text-[#000000] whitespace-nowrap">Approved</th>
+                        <th className="text-center py-2 px-2 font-bold text-[#000000] whitespace-nowrap">STP Status</th>
+                        <th className="text-center py-2 px-2 font-bold text-[#000000] whitespace-nowrap">Claims Proc. Time</th>
+                        <th className="text-center py-2 px-2 font-bold text-[#000000] whitespace-nowrap">OCR Conf.</th>
+                        <th className="text-left py-2 px-2 font-bold text-[#000000] whitespace-nowrap">Region</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -591,6 +648,72 @@ export default function PowerBIReport() {
                         </tr>
                       ))}
                     </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* MGA Performance Matrix */}
+            <Card className="bg-white border border-[#E5E7EB] shadow-sm">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-[#000000] font-semibold text-base flex items-center justify-between">
+                  <span>MGA Performance Matrix</span>
+                  <Badge className="bg-[#F57418] text-white">{mgaPerformanceMatrix.length} MGAs</Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs">
+                    <thead>
+                      <tr className="border-b-2 border-[#F57418] bg-[#FEF3E7]">
+                        <th className="text-left py-2 px-3 font-bold text-[#000000]">MGA Name</th>
+                        <th className="text-right py-2 px-3 font-bold text-[#000000]">Total Claims</th>
+                        <th className="text-center py-2 px-3 font-bold text-[#000000]">STP Rate</th>
+                        <th className="text-center py-2 px-3 font-bold text-[#000000]">Claims Proc. Time</th>
+                        <th className="text-center py-2 px-3 font-bold text-[#000000]">OCR Success</th>
+                        <th className="text-center py-2 px-3 font-bold text-[#000000]">Override Rate</th>
+                        <th className="text-right py-2 px-3 font-bold text-[#000000]">Revenue</th>
+                        <th className="text-right py-2 px-3 font-bold text-[#000000]">FTE Savings</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {mgaPerformanceMatrix.map((mga, idx) => (
+                        <tr key={idx} className={`border-b border-[#E5E7EB] hover:bg-[#FEF3E7] transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-[#FAFAFA]'}`}>
+                          <td className="py-2 px-3 text-[#000000] font-semibold">{mga.mga}</td>
+                          <td className="py-2 px-3 text-right text-[#000000]">{mga.totalClaims.toLocaleString()}</td>
+                          <td className="py-2 px-3 text-center">
+                            <span className={parseFloat(mga.stpRate) >= 80 ? "text-green-600 font-semibold" : parseFloat(mga.stpRate) >= 75 ? "text-yellow-600" : "text-red-600"}>
+                              {mga.stpRate}
+                            </span>
+                          </td>
+                          <td className="py-2 px-3 text-center text-[#5F5F5F]">{mga.avgProcessingTime}</td>
+                          <td className="py-2 px-3 text-center">
+                            <span className={parseFloat(mga.ocrSuccessRate) >= 95 ? "text-green-600 font-semibold" : parseFloat(mga.ocrSuccessRate) >= 90 ? "text-yellow-600" : "text-red-600"}>
+                              {mga.ocrSuccessRate}
+                            </span>
+                          </td>
+                          <td className="py-2 px-3 text-center">
+                            <span className={parseFloat(mga.overrideRate) <= 15 ? "text-green-600" : parseFloat(mga.overrideRate) <= 20 ? "text-yellow-600" : "text-red-600 font-semibold"}>
+                              {mga.overrideRate}
+                            </span>
+                          </td>
+                          <td className="py-2 px-3 text-right text-[#000000] font-semibold">{mga.revenue}</td>
+                          <td className="py-2 px-3 text-right text-[#F57418] font-bold">{mga.fteSavings}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                    <tfoot>
+                      <tr className="border-t-2 border-[#F57418] bg-[#FEF3E7] font-bold">
+                        <td className="py-2 px-3 text-[#000000]">TOTAL</td>
+                        <td className="py-2 px-3 text-right text-[#000000]">{mgaPerformanceMatrix.reduce((sum, m) => sum + m.totalClaims, 0).toLocaleString()}</td>
+                        <td className="py-2 px-3 text-center text-[#000000]">78.4%</td>
+                        <td className="py-2 px-3 text-center text-[#000000]">2.3 min</td>
+                        <td className="py-2 px-3 text-center text-[#000000]">94.2%</td>
+                        <td className="py-2 px-3 text-center text-[#000000]">17.4%</td>
+                        <td className="py-2 px-3 text-right text-[#000000]">$2,759,370</td>
+                        <td className="py-2 px-3 text-right text-[#F57418]">13.2</td>
+                      </tr>
+                    </tfoot>
                   </table>
                 </div>
               </CardContent>
