@@ -586,33 +586,25 @@ export default function PowerBIReport() {
                   <CardTitle className="text-[#000000] font-semibold">Risk & Fraud Detection</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ResponsiveContainer width="100%" height={200}>
-                    <BarChart
-                      data={invoiceAlterationData}
-                      layout="vertical"
-                      margin={{ top: 5, right: 30, left: 150, bottom: 5 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                      <XAxis type="number" stroke="#5F5F5F" />
-                      <YAxis dataKey="name" type="category" stroke="#5F5F5F" width={140} />
-                      <Tooltip formatter={(value) => value.toLocaleString()} contentStyle={{ backgroundColor: "#fff", border: "1px solid #E5E7EB" }} />
-                      <Bar dataKey="value" fill="#8884d8" radius={[0, 8, 8, 0]}>
+                  <ResponsiveContainer width="100%" height={280}>
+                    <PieChart>
+                      <Pie
+                        data={invoiceAlterationData}
+                        cx="50%"
+                        cy="45%"
+                        labelLine={true}
+                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
+                        outerRadius={90}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
                         {invoiceAlterationData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.fill} />
                         ))}
-                      </Bar>
-                    </BarChart>
+                      </Pie>
+                      <Tooltip formatter={(value) => value.toLocaleString()} contentStyle={{ backgroundColor: "#fff", border: "1px solid #E5E7EB" }} />
+                    </PieChart>
                   </ResponsiveContainer>
-                  <div className="mt-4 grid grid-cols-2 gap-4 text-center">
-                    <div className="p-3 bg-green-50 rounded border border-green-200">
-                      <div className="text-2xl font-bold text-green-700">95.3%</div>
-                      <div className="text-xs text-green-600 mt-1">Clean Invoices</div>
-                    </div>
-                    <div className="p-3 bg-red-50 rounded border border-red-200">
-                      <div className="text-2xl font-bold text-red-700">4.7%</div>
-                      <div className="text-xs text-red-600 mt-1">SUI Flagged</div>
-                    </div>
-                  </div>
                 </CardContent>
               </Card>
 
