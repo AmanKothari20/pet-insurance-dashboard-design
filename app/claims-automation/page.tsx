@@ -586,25 +586,33 @@ export default function PowerBIReport() {
                   <CardTitle className="text-[#000000] font-semibold">Risk & Fraud Detection</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ResponsiveContainer width="100%" height={250}>
-                    <PieChart>
-                      <Pie
-                        data={invoiceAlterationData}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        label={({ name, value, percent }) => `${name}: ${value} (${(percent * 100).toFixed(1)}%)`}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="value"
-                      >
+                  <ResponsiveContainer width="100%" height={200}>
+                    <BarChart
+                      data={invoiceAlterationData}
+                      layout="vertical"
+                      margin={{ top: 5, right: 30, left: 150, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                      <XAxis type="number" stroke="#5F5F5F" />
+                      <YAxis dataKey="name" type="category" stroke="#5F5F5F" width={140} />
+                      <Tooltip formatter={(value) => value.toLocaleString()} contentStyle={{ backgroundColor: "#fff", border: "1px solid #E5E7EB" }} />
+                      <Bar dataKey="value" fill="#8884d8" radius={[0, 8, 8, 0]}>
                         {invoiceAlterationData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.fill} />
                         ))}
-                      </Pie>
-                      <Tooltip formatter={(value) => value.toLocaleString()} />
-                    </PieChart>
+                      </Bar>
+                    </BarChart>
                   </ResponsiveContainer>
+                  <div className="mt-4 grid grid-cols-2 gap-4 text-center">
+                    <div className="p-3 bg-green-50 rounded border border-green-200">
+                      <div className="text-2xl font-bold text-green-700">95.3%</div>
+                      <div className="text-xs text-green-600 mt-1">Clean Invoices</div>
+                    </div>
+                    <div className="p-3 bg-red-50 rounded border border-red-200">
+                      <div className="text-2xl font-bold text-red-700">4.7%</div>
+                      <div className="text-xs text-red-600 mt-1">SUI Flagged</div>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
 
@@ -613,11 +621,44 @@ export default function PowerBIReport() {
                 <CardHeader>
                   <CardTitle className="text-[#000000] font-semibold">Claim Audit Coverage</CardTitle>
                 </CardHeader>
-                <CardContent className="flex items-center justify-center h-250">
-                  <div className="text-center">
-                    <div className="text-5xl font-bold text-[#F57418]">87.3%</div>
-                    <div className="text-sm text-[#5F5F5F] mt-2">Claims with Complete Audit Trail</div>
-                    <div className="text-xs text-[#5F5F5F] mt-4">Target: 95% | Current: 87.3%</div>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex items-end gap-8">
+                      <div className="flex-1">
+                        {/* Progress Bar */}
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-center mb-1">
+                            <span className="text-sm font-semibold text-[#000000]">Coverage Progress</span>
+                            <span className="text-sm font-bold text-[#F57418]">87.3%</span>
+                          </div>
+                          <div className="w-full bg-[#E5E7EB] rounded-full h-3 overflow-hidden">
+                            <div className="bg-[#F57418] h-full rounded-full" style={{ width: "87.3%" }} />
+                          </div>
+                          <div className="flex justify-between text-xs text-[#5F5F5F] mt-2">
+                            <span>Current: 87.3%</span>
+                            <span>Target: 95%</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-4xl font-bold text-[#F57418]">87.3<span className="text-2xl">%</span></div>
+                        <div className="text-xs text-[#5F5F5F] mt-2">Claims Audited</div>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-[#E5E7EB]">
+                      <div className="text-center">
+                        <div className="text-lg font-bold text-green-600">7,624</div>
+                        <div className="text-xs text-[#5F5F5F]">Complete</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg font-bold text-amber-600">1,247</div>
+                        <div className="text-xs text-[#5F5F5F]">In Progress</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg font-bold text-red-600">378</div>
+                        <div className="text-xs text-[#5F5F5F]">Gap to Target</div>
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
