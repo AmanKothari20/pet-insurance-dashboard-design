@@ -10,17 +10,20 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
   LineChart,
   Line,
   FunnelChart,
   Funnel,
   LabelList,
+  DonutChart,
+  PieChart,
+  Pie,
+  Cell,
   AreaChart,
   Area,
-  Treemap,
+  ComposedChart,
+  ScatterChart,
+  Scatter,
 } from "recharts"
 import {
   Select,
@@ -32,11 +35,6 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
-import {
   TrendingUp,
   TrendingDown,
   DollarSign,
@@ -44,30 +42,11 @@ import {
   Clock,
   CheckCircle2,
   Zap,
-  ChevronDown,
-  ChevronUp,
-  AlertTriangle,
-  Target,
-  Activity,
+  AlertCircle,
+  Info,
+  BarChart3,
+  PieChart as PieChartIcon,
 } from "lucide-react"
-import Image from "next/image"
-
-// Color palette constants (matching existing theme)
-const colors = {
-  solidOrange: "#F57418",
-  gradientOrange1: "#FBA43B",
-  gradientOrange2: "#FA9A34",
-  black: "#000000",
-  darkGray: "#5F5F5F",
-  lightGray: "#F5F7F8",
-  lightPink: "#FEBCD7",
-  lightBlue: "#C4D0E6",
-  lightOlive: "#ACAC92",
-  lightOrange: "#FA9829",
-  green: "#22C55E",
-  red: "#DC2626",
-  yellow: "#EAB308",
-}
 
 // ==================== KPI DATA ====================
 const topKPIs = [
@@ -123,704 +102,495 @@ const topKPIs = [
   },
 ]
 
-// ==================== PERFORMANCE SECTION DATA ====================
+// Global Filters Data
+const mgaOptions = [
+  { label: "All MGAs", value: "all" },
+  { label: "Trupanion", value: "trupanion" },
+  { label: "Nationwide", value: "nationwide" },
+  { label: "ASPCA Pet", value: "aspca" },
+  { label: "PetFirst", value: "petfirst" },
+]
+
+const productOptions = [
+  { label: "All Products", value: "all" },
+  { label: "OCR Only", value: "ocr-only" },
+  { label: "OCR + Claims Automation", value: "ocr-claims" },
+  { label: "Full Suite", value: "full-suite" },
+]
+
+// PAGE 1: Executive Overview Data
+const automationPipelineData = [
+  { name: "Submission", value: 10000 },
+  { name: "OCR Processing", value: 9840 },
+  { name: "Treatment Mapping", value: 8750 },
+  { name: "Rule Engine", value: 7920 },
+  { name: "Auto-Approved", value: 7450 },
+]
+
+const ocrSuccessData = [
+  { month: "Jan", ocrSuccess: 96.2, caladan: 94.8, fallback: 3.1, mrsAccuracy: 97.5 },
+  { month: "Feb", ocrSuccess: 96.8, caladan: 95.2, fallback: 2.8, mrsAccuracy: 97.8 },
+  { month: "Mar", ocrSuccess: 97.1, caladan: 95.8, fallback: 2.5, mrsAccuracy: 98.1 },
+  { month: "Apr", ocrSuccess: 97.4, caladan: 96.2, fallback: 2.2, mrsAccuracy: 98.3 },
+  { month: "May", ocrSuccess: 97.6, caladan: 96.5, fallback: 2.0, mrsAccuracy: 98.5 },
+]
+
 const processingTimeByProduct = [
-  { month: "Jan", ocrOnly: 4.2, fullSuite: 2.8, clarusComplete: 2.1 },
-  { month: "Feb", ocrOnly: 3.9, fullSuite: 2.5, clarusComplete: 1.9 },
-  { month: "Mar", ocrOnly: 3.5, fullSuite: 2.3, clarusComplete: 1.7 },
-  { month: "Apr", ocrOnly: 3.2, fullSuite: 2.1, clarusComplete: 1.5 },
-  { month: "May", ocrOnly: 3.0, fullSuite: 1.9, clarusComplete: 1.3 },
-  { month: "Jun", ocrOnly: 2.8, fullSuite: 1.8, clarusComplete: 1.2 },
+  { product: "OCR Only", time: 8, savings: 2.3 },
+  { product: "OCR + Claims", time: 24, savings: 8.5 },
+  { product: "Full Suite", time: 42, savings: 12.5 },
 ]
 
-const mrsAccuracyData = [
-  { version: "v1.0", accuracy: 82, month: "Jan" },
-  { version: "v1.1", accuracy: 86, month: "Feb" },
-  { version: "v1.2", accuracy: 89, month: "Mar" },
-  { version: "v2.0", accuracy: 92, month: "Apr" },
-  { version: "v2.1", accuracy: 94, month: "May" },
-  { version: "v2.2", accuracy: 96, month: "Jun" },
-]
-
-const systemUptimeData = [
-  { week: "W1", uptime: 99.92 },
-  { week: "W2", uptime: 99.95 },
-  { week: "W3", uptime: 99.89 },
-  { week: "W4", uptime: 99.98 },
-  { week: "W5", uptime: 99.94 },
-  { week: "W6", uptime: 99.97 },
-]
-
-// ==================== PIPELINE & FALLOUT DATA ====================
-const falloutFunnelData = [
-  { name: "Claims Submitted", value: 10000, fill: colors.solidOrange },
-  { name: "OCR Processed", value: 9200, fill: colors.gradientOrange1 },
-  { name: "Treatment Mapped", value: 7800, fill: colors.lightOrange },
-  { name: "STP Eligible", value: 6500, fill: colors.lightPink },
-  { name: "Auto-Approved", value: 5200, fill: colors.lightBlue },
-]
-
-const treatmentMappingFallout = [
-  { name: "Mapped", value: 82, fill: colors.green },
-  { name: "Fallout", value: 18, fill: colors.red },
-]
-
-const overrideRateData = [
-  { category: "Eligibility", confirmed: 85, overridden: 15 },
-  { category: "Pre-Ex", confirmed: 72, overridden: 28 },
-  { category: "Deductible", confirmed: 91, overridden: 9 },
-  { category: "Coverage Limit", confirmed: 78, overridden: 22 },
-  { category: "Waiting Period", confirmed: 88, overridden: 12 },
-]
-
-// ==================== PRODUCT & REVENUE DATA ====================
-const practiceConnectData = [
-  { month: "Jul", connected: 45, ocr: 55 },
-  { month: "Aug", connected: 52, ocr: 48 },
-  { month: "Sep", connected: 58, ocr: 42 },
-  { month: "Oct", connected: 64, ocr: 36 },
-  { month: "Nov", connected: 71, ocr: 29 },
-  { month: "Dec", connected: 76, ocr: 24 },
-  { month: "Jan", connected: 82, ocr: 18 },
-  { month: "Feb", connected: 86, ocr: 14 },
-  { month: "Mar", connected: 89, ocr: 11 },
-]
-
-const productAdoptionTreemap = [
-  { name: "Clarus Complete", size: 42, fill: colors.solidOrange },
-  { name: "OCR + Fraud", size: 25, fill: colors.lightPink },
-  { name: "OCR Only", size: 18, fill: colors.lightBlue },
-  { name: "Full Suite", size: 10, fill: colors.lightOlive },
-  { name: "Custom Bundle", size: 5, fill: colors.lightOrange },
-]
-
-// ==================== DIAGNOSTIC TABLE DATA ====================
 const mgaOnboardingData = [
-  { name: "Trupanion", status: "Active", progress: 100, claims: 2845 },
-  { name: "Nationwide", status: "Active", progress: 100, claims: 1923 },
-  { name: "ASPCA Pet", status: "Onboarding", progress: 75, claims: 0 },
-  { name: "PetFirst", status: "Active", progress: 100, claims: 1456 },
-  { name: "Embrace", status: "Pending", progress: 45, claims: 0 },
+  { name: "Trupanion", connected: 12, target: 12, status: "Complete" },
+  { name: "Nationwide", connected: 10, target: 12, status: "In Progress" },
+  { name: "ASPCA Pet", connected: 8, target: 12, status: "In Progress" },
+  { name: "PetFirst", connected: 6, target: 12, status: "Planning" },
+  { name: "Embrace", connected: 3, target: 12, status: "Planning" },
 ]
 
-const financialVarianceData = [
-  { claimId: "CLM-78234", variance: "$1,245", reason: "Coverage Exception", reviewer: "J. Smith" },
-  { claimId: "CLM-78456", variance: "$892", reason: "Pre-Ex Dispute", reviewer: "M. Johnson" },
-  { claimId: "CLM-78512", variance: "$2,156", reason: "Deductible Error", reviewer: "A. Williams" },
-  { claimId: "CLM-78623", variance: "$567", reason: "Policy Mismatch", reviewer: "S. Davis" },
+// PAGE 2: Finance Deep-Dive Data
+const revenueByProductMGA = [
+  { mga: "Trupanion", ocrOnly: 124500, ocrClaims: 342800, fullSuite: 856200 },
+  { mga: "Nationwide", ocrOnly: 98700, ocrClaims: 256400, fullSuite: 543100 },
+  { mga: "PetFirst", ocrOnly: 76300, ocrClaims: 189600, fullSuite: 421800 },
+  { mga: "ASPCA Pet", ocrOnly: 54200, ocrClaims: 123400, fullSuite: 289500 },
+  { mga: "Embrace", ocrOnly: 32100, ocrClaims: 76800, fullSuite: 145600 },
 ]
 
-// ==================== DETAILED CLAIMS DATA (LOWEST GRAIN) ====================
-const detailedClaimsData = [
-  { claimId: "CLM-82341", submissionDate: "2026-04-25", mga: "Trupanion", petName: "Max", species: "Dog", breed: "Golden Retriever", claimType: "Claim", product: "Clarus Complete", invoiceAmount: "$1,245.00", approvedAmount: "$1,120.50", stpStatus: "Auto-Approved", processingTime: "1.2 min", ocrConfidence: "98.2%", region: "Northeast" },
-  { claimId: "CLM-82342", submissionDate: "2026-04-25", mga: "Nationwide", petName: "Whiskers", species: "Cat", breed: "Persian", claimType: "Estimate", product: "OCR + Fraud", invoiceAmount: "$567.00", approvedAmount: "$510.30", stpStatus: "Manual Review", processingTime: "4.5 min", ocrConfidence: "89.1%", region: "Southeast" },
-  { claimId: "CLM-82343", submissionDate: "2026-04-25", mga: "PetFirst", petName: "Buddy", species: "Dog", breed: "Labrador", claimType: "Claim", product: "Clarus Complete", invoiceAmount: "$2,890.00", approvedAmount: "$2,601.00", stpStatus: "Auto-Approved", processingTime: "0.9 min", ocrConfidence: "99.1%", region: "West" },
-  { claimId: "CLM-82344", submissionDate: "2026-04-25", mga: "Trupanion", petName: "Luna", species: "Dog", breed: "French Bulldog", claimType: "Claim", product: "Full Suite", invoiceAmount: "$892.00", approvedAmount: "$802.80", stpStatus: "Auto-Approved", processingTime: "1.1 min", ocrConfidence: "97.8%", region: "Midwest" },
-  { claimId: "CLM-82345", submissionDate: "2026-04-24", mga: "Nationwide", petName: "Mittens", species: "Cat", breed: "Siamese", claimType: "Claim", product: "OCR Only", invoiceAmount: "$345.00", approvedAmount: "$0.00", stpStatus: "Denied", processingTime: "2.3 min", ocrConfidence: "94.5%", region: "Northeast" },
-  { claimId: "CLM-82346", submissionDate: "2026-04-24", mga: "PetFirst", petName: "Rocky", species: "Dog", breed: "German Shepherd", claimType: "Claim", product: "Clarus Complete", invoiceAmount: "$1,678.00", approvedAmount: "$1,510.20", stpStatus: "Auto-Approved", processingTime: "1.0 min", ocrConfidence: "98.9%", region: "Southeast" },
-  { claimId: "CLM-82347", submissionDate: "2026-04-24", mga: "Trupanion", petName: "Bella", species: "Dog", breed: "Poodle", claimType: "Estimate", product: "Full Suite", invoiceAmount: "$456.00", approvedAmount: "$410.40", stpStatus: "Pending", processingTime: "—", ocrConfidence: "96.2%", region: "West" },
-  { claimId: "CLM-82348", submissionDate: "2026-04-24", mga: "Nationwide", petName: "Charlie", species: "Dog", breed: "Beagle", claimType: "Claim", product: "OCR + Fraud", invoiceAmount: "$789.00", approvedAmount: "$710.10", stpStatus: "Auto-Approved", processingTime: "1.4 min", ocrConfidence: "97.3%", region: "Midwest" },
-  { claimId: "CLM-82349", submissionDate: "2026-04-23", mga: "PetFirst", petName: "Oliver", species: "Cat", breed: "Maine Coon", claimType: "Claim", product: "Clarus Complete", invoiceAmount: "$1,234.00", approvedAmount: "$1,110.60", stpStatus: "Auto-Approved", processingTime: "0.8 min", ocrConfidence: "99.4%", region: "Northeast" },
-  { claimId: "CLM-82350", submissionDate: "2026-04-23", mga: "Trupanion", petName: "Daisy", species: "Dog", breed: "Bulldog", claimType: "Claim", product: "Full Suite", invoiceAmount: "$2,345.00", approvedAmount: "$2,110.50", stpStatus: "Manual Review", processingTime: "5.2 min", ocrConfidence: "85.6%", region: "Southeast" },
+const mgaRuleAlignmentData = [
+  { mga: "Trupanion", passThrough: 87.2, treatmentMapping: 18.5, preEx: 3.2, policyMismatch: 1.8 },
+  { mga: "Nationwide", passThrough: 81.4, treatmentMapping: 24.1, preEx: 5.3, policyMismatch: 2.9 },
+  { mga: "ASPCA Pet", passThrough: 78.9, treatmentMapping: 28.7, preEx: 7.1, policyMismatch: 4.2 },
+  { mga: "PetFirst", passThrough: 84.6, treatmentMapping: 21.3, preEx: 4.2, policyMismatch: 2.1 },
 ]
 
-// ==================== TREATMENT MAPPING DETAILS ====================
-const treatmentMappingDetails = [
-  { treatmentCode: "VACC-001", treatmentDesc: "Annual Vaccination", mappedTo: "Preventive Care - Vaccines", confidence: "99.8%", status: "Mapped", claimsCount: 1245 },
-  { treatmentCode: "SURG-042", treatmentDesc: "ACL Repair Surgery", mappedTo: "Orthopedic Surgery - Knee", confidence: "98.5%", status: "Mapped", claimsCount: 89 },
-  { treatmentCode: "DENT-015", treatmentDesc: "Dental Cleaning", mappedTo: "Dental - Routine Cleaning", confidence: "97.2%", status: "Mapped", claimsCount: 456 },
-  { treatmentCode: "DIAG-088", treatmentDesc: "MRI Scan", mappedTo: "Diagnostic Imaging - MRI", confidence: "99.1%", status: "Mapped", claimsCount: 234 },
-  { treatmentCode: "EMER-003", treatmentDesc: "Emergency Triage", mappedTo: null, confidence: "45.2%", status: "Fallout", claimsCount: 67 },
-  { treatmentCode: "SPEC-129", treatmentDesc: "Specialty Consult", mappedTo: null, confidence: "52.8%", status: "Fallout", claimsCount: 34 },
-  { treatmentCode: "LAB-056", treatmentDesc: "Blood Panel CBC", mappedTo: "Laboratory - Blood Work", confidence: "98.9%", status: "Mapped", claimsCount: 892 },
-  { treatmentCode: "PHARM-201", treatmentDesc: "Antibiotics Course", mappedTo: "Pharmacy - Antibiotics", confidence: "96.7%", status: "Mapped", claimsCount: 567 },
-  { treatmentCode: "HOSP-012", treatmentDesc: "Overnight Monitoring", mappedTo: "Hospitalization - Monitoring", confidence: "94.3%", status: "Mapped", claimsCount: 123 },
-  { treatmentCode: "THER-045", treatmentDesc: "Physical Therapy Session", mappedTo: null, confidence: "61.4%", status: "Fallout", claimsCount: 45 },
+const claimDetailData = [
+  { id: "CLM-82341", mga: "Trupanion", product: "Full Suite", time: 28, status: "STP Complete", override: "None", variance: "+$0", fraud: false, audit: "Complete" },
+  { id: "CLM-82342", mga: "Nationwide", product: "OCR + Claims", time: 45, status: "Clarus Complete", override: "Treatment Mapping", variance: "+$125", fraud: false, audit: "Complete" },
+  { id: "CLM-82343", mga: "PetFirst", product: "Full Suite", time: 32, status: "STP Complete", override: "None", variance: "-$45", fraud: false, audit: "Complete" },
+  { id: "CLM-82344", mga: "Trupanion", product: "OCR + Claims", time: 52, status: "MGA Stopped", override: "Pre-Ex", variance: "$0", fraud: true, audit: "Incomplete" },
+  { id: "CLM-82345", mga: "ASPCA Pet", product: "Full Suite", time: 38, status: "STP Complete", override: "None", variance: "+$230", fraud: false, audit: "Complete" },
+  { id: "CLM-82346", mga: "Nationwide", product: "OCR Only", time: 18, status: "Clarus Complete", override: "None", variance: "$0", fraud: false, audit: "Complete" },
+  { id: "CLM-82347", mga: "PetFirst", product: "Full Suite", time: 35, status: "STP Complete", override: "Policy Mismatch", variance: "-$340", fraud: false, audit: "Complete" },
+  { id: "CLM-82348", mga: "Trupanion", product: "Full Suite", time: 30, status: "STP Complete", override: "None", variance: "+$0", fraud: false, audit: "Complete" },
 ]
 
-// ==================== MGA PERFORMANCE MATRIX ====================
-const mgaPerformanceMatrix = [
-  { mga: "Trupanion", totalClaims: 2845, stpRate: "82.4%", avgProcessingTime: "1.8 min", ocrSuccessRate: "96.2%", overrideRate: "12.3%", revenue: "$892,450", fteSavings: "4.2" },
-  { mga: "Nationwide", totalClaims: 1923, stpRate: "76.8%", avgProcessingTime: "2.4 min", ocrSuccessRate: "93.1%", overrideRate: "18.7%", revenue: "$567,890", fteSavings: "2.8" },
-  { mga: "PetFirst", totalClaims: 1456, stpRate: "79.2%", avgProcessingTime: "2.1 min", ocrSuccessRate: "95.4%", overrideRate: "14.5%", revenue: "$423,560", fteSavings: "2.1" },
-  { mga: "ASPCA Pet", totalClaims: 987, stpRate: "74.5%", avgProcessingTime: "2.8 min", ocrSuccessRate: "91.8%", overrideRate: "21.2%", revenue: "$287,340", fteSavings: "1.4" },
-  { mga: "Embrace", totalClaims: 654, stpRate: "71.2%", avgProcessingTime: "3.1 min", ocrSuccessRate: "89.7%", overrideRate: "24.8%", revenue: "$198,450", fteSavings: "0.9" },
-  { mga: "Pets Best", totalClaims: 512, stpRate: "77.9%", avgProcessingTime: "2.3 min", ocrSuccessRate: "94.2%", overrideRate: "16.1%", revenue: "$156,780", fteSavings: "0.7" },
-  { mga: "Healthy Paws", totalClaims: 423, stpRate: "80.1%", avgProcessingTime: "1.9 min", ocrSuccessRate: "95.8%", overrideRate: "13.4%", revenue: "$134,560", fteSavings: "0.6" },
-  { mga: "Figo", totalClaims: 345, stpRate: "73.6%", avgProcessingTime: "2.7 min", ocrSuccessRate: "92.4%", overrideRate: "19.8%", revenue: "$98,340", fteSavings: "0.5" },
+const invoiceAlterationData = [
+  { name: "Clean Invoices", value: 9234, fill: "#10b981" },
+  { name: "SUI Flagged", value: 452, fill: "#ef4444" },
 ]
 
-export default function ClaimsAutomationDashboard() {
-  const [selectedDateRange, setSelectedDateRange] = useState("30d")
+// KPI Summary Data
+const executiveKPIs = {
+  stpRate: "74.5%",
+  clarusRate: "88.2%",
+  procTime: "42 sec",
+  procTimeDetails: "P50: 28s | P95: 58s | P99: 89s",
+  estimateRate: "91.0%",
+  fteSavings: "142",
+  humanMinsSaved: "12.5",
+  uptime: "99.95%",
+  targetUptime: "99.9%",
+}
+
+const financeKPIs = {
+  financialAccuracy: "96.4%",
+  netVariance: "$12,450",
+  overpaid: "$8,100",
+  underpaid: "$4,350",
+  billingAccuracy: "99.8%",
+  feedbackCoverage: "85.2%",
+}
+
+// KPI Card Component
+function KPICard({ title, value, subtitle, icon: Icon, delta, alert, tooltip }) {
+  return (
+    <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
+      <CardHeader className="pb-2">
+        <div className="flex items-start justify-between">
+          <CardTitle className="text-[#5F5F5F] font-medium text-sm">{title}</CardTitle>
+          {alert && <AlertCircle className="w-4 h-4 text-[#F57418]" />}
+          {!alert && Icon && <Icon className="w-5 h-5 text-[#F57418]" />}
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-1">
+          <div className="flex items-end justify-between">
+            <span className="text-2xl font-bold text-[#000000]">{value}</span>
+            {delta && (
+              <span className={`text-xs font-semibold ${delta.includes("+") ? "text-green-600" : "text-red-600"}`}>
+                {delta}
+              </span>
+            )}
+          </div>
+          {subtitle && <p className="text-xs text-[#5F5F5F]">{subtitle}</p>}
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+export default function PowerBIReport() {
+  const [currentPage, setCurrentPage] = useState("executive")
+  const [dateRange, setDateRange] = useState("30d")
   const [selectedMGA, setSelectedMGA] = useState("all")
-  const [selectedProductSet, setSelectedProductSet] = useState("all")
-  const [selectedClaimType, setSelectedClaimType] = useState("all")
-  const [selectedRegion, setSelectedRegion] = useState("all")
-  const [selectedFeedback, setSelectedFeedback] = useState("all")
-  const [isDiagnosticOpen, setIsDiagnosticOpen] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState("all")
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FBA43B] to-[#F57418]">
+    <div className="min-h-screen bg-[#FAFAFA]">
       {/* Header */}
-      <header className="bg-white px-6 py-3 border-b border-[#F5F7F8] shadow-sm sticky top-0 z-50">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <Image
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Clarus%20-%20Full%20color-WyHkfsKMBIfHDT1HdgKN9kuIjUp9Z4.png"
-              alt="Clarus Logo"
-              width={140}
-              height={40}
-              className="h-10 w-auto"
-            />
+      <header className="bg-white border-b border-[#E5E7EB] sticky top-0 z-50 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-2xl font-bold text-[#000000]">Clarus Platform</h1>
+              <p className="text-sm text-[#5F5F5F]">Power BI Analytics Report</p>
+            </div>
+            <div className="text-xs text-[#5F5F5F]">
+              Last Updated: May 18, 2026 | Data refreshes every 24 hours
+            </div>
           </div>
-          <div className="flex items-center gap-3 text-xs text-[#5F5F5F]">
-            <span>Last Refresh: Apr 26, 2026 · 14:32 UTC</span>
-            <span className="text-[#F57418] font-semibold">|</span>
-            <span className="font-semibold text-[#F57418]">FY2026</span>
+
+          {/* Navigation Tabs */}
+          <div className="flex gap-1 border-b border-[#E5E7EB] mb-4">
+            <button
+              onClick={() => setCurrentPage("executive")}
+              className={`px-4 py-2 font-semibold text-sm transition-colors border-b-2 ${
+                currentPage === "executive"
+                  ? "text-[#F57418] border-[#F57418]"
+                  : "text-[#5F5F5F] border-transparent hover:text-[#000000]"
+              }`}
+            >
+              Executive Overview
+            </button>
+            <button
+              onClick={() => setCurrentPage("finance")}
+              className={`px-4 py-2 font-semibold text-sm transition-colors border-b-2 ${
+                currentPage === "finance"
+                  ? "text-[#F57418] border-[#F57418]"
+                  : "text-[#5F5F5F] border-transparent hover:text-[#000000]"
+              }`}
+            >
+              Finance & Claims Deep-Dive
+            </button>
+          </div>
+
+          {/* Global Slicers */}
+          <div className="flex flex-wrap gap-4 items-end">
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-semibold text-[#5F5F5F] uppercase tracking-wide">Date Range</label>
+              <Select value={dateRange} onValueChange={setDateRange}>
+                <SelectTrigger className="w-[160px] bg-[#F5F7F8] border border-[#F57418] text-[#000000]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="30d">Last 30 Days</SelectItem>
+                  <SelectItem value="90d">Last 90 Days</SelectItem>
+                  <SelectItem value="ytd">Year to Date</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-semibold text-[#5F5F5F] uppercase tracking-wide">MGA / System of Record</label>
+              <Select value={selectedMGA} onValueChange={setSelectedMGA}>
+                <SelectTrigger className="w-[200px] bg-[#F5F7F8] border border-[#F57418] text-[#000000]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {mgaOptions.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-semibold text-[#5F5F5F] uppercase tracking-wide">Product Set</label>
+              <Select value={selectedProduct} onValueChange={setSelectedProduct}>
+                <SelectTrigger className="w-[200px] bg-[#F5F7F8] border border-[#F57418] text-[#000000]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {productOptions.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="p-6">
-        <div className="bg-[#F5F7F8] rounded-lg p-6 shadow-lg">
-          {/* Report Headline */}
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-[#000000] to-[#FA9A34] bg-clip-text text-transparent mb-6">
-            Claims Automation Dashboard
-          </h1>
-
-          {/* Slicers Pane (Global Filters) */}
-          <Card className="bg-white border border-[#E5E7EB] mb-6 shadow-sm">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-[#F57418] text-lg font-semibold">
-                Filters
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap gap-6">
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-semibold text-[#5F5F5F] uppercase tracking-wide">Date Range</label>
-                  <Select value={selectedDateRange} onValueChange={setSelectedDateRange}>
-                    <SelectTrigger className="w-[160px] bg-[#F5F7F8] border border-[#F57418] text-[#000000]">
-                      <SelectValue placeholder="Date Range" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="30d">Last 30 Days</SelectItem>
-                      <SelectItem value="90d">Last 90 Days</SelectItem>
-                      <SelectItem value="ytd">Year to Date</SelectItem>
-                      <SelectItem value="custom">Custom Range</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-semibold text-[#5F5F5F] uppercase tracking-wide">MGA Name</label>
-                  <Select value={selectedMGA} onValueChange={setSelectedMGA}>
-                    <SelectTrigger className="w-[160px] bg-[#F5F7F8] border border-[#F57418] text-[#000000]">
-                      <SelectValue placeholder="MGA Name" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All MGAs</SelectItem>
-                      <SelectItem value="trupanion">Trupanion</SelectItem>
-                      <SelectItem value="nationwide">Nationwide</SelectItem>
-                      <SelectItem value="aspca">ASPCA Pet</SelectItem>
-                      <SelectItem value="petfirst">PetFirst</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-semibold text-[#5F5F5F] uppercase tracking-wide">Product Set</label>
-                  <Select value={selectedProductSet} onValueChange={setSelectedProductSet}>
-                    <SelectTrigger className="w-[160px] bg-[#F5F7F8] border border-[#F57418] text-[#000000]">
-                      <SelectValue placeholder="Product Set" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Products</SelectItem>
-                      <SelectItem value="ocr-only">OCR Only</SelectItem>
-                      <SelectItem value="fraud-only">Fraud Only</SelectItem>
-                      <SelectItem value="complete">Clarus Complete</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-semibold text-[#5F5F5F] uppercase tracking-wide">Claim Type</label>
-                  <Select value={selectedClaimType} onValueChange={setSelectedClaimType}>
-                    <SelectTrigger className="w-[160px] bg-[#F5F7F8] border border-[#F57418] text-[#000000]">
-                      <SelectValue placeholder="Claim Type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Types</SelectItem>
-                      <SelectItem value="claim">Claim</SelectItem>
-                      <SelectItem value="estimate">Estimate</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-semibold text-[#5F5F5F] uppercase tracking-wide">Region</label>
-                  <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-                    <SelectTrigger className="w-[160px] bg-[#F5F7F8] border border-[#F57418] text-[#000000]">
-                      <SelectValue placeholder="Region" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Regions</SelectItem>
-                      <SelectItem value="northeast">Northeast</SelectItem>
-                      <SelectItem value="southeast">Southeast</SelectItem>
-                      <SelectItem value="midwest">Midwest</SelectItem>
-                      <SelectItem value="west">West</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-semibold text-[#5F5F5F] uppercase tracking-wide">Feedback Status</label>
-                  <Select value={selectedFeedback} onValueChange={setSelectedFeedback}>
-                    <SelectTrigger className="w-[180px] bg-[#F5F7F8] border border-[#F57418] text-[#000000]">
-                      <SelectValue placeholder="Feedback Status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Feedback</SelectItem>
-                      <SelectItem value="available">Feedback Available</SelectItem>
-                      <SelectItem value="none">No Feedback/External</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Top KPI Cards (North Star Metrics) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
-            {topKPIs.map((kpi) => (
-              <Card key={kpi.id} className="bg-white border border-[#E5E7EB] shadow-sm text-center">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-semibold flex items-center justify-center gap-2 text-[#F57418]">
-                    {kpi.icon}
-                    {kpi.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold text-[#000000]">
-                    {kpi.value}
-                    <span className="text-lg ml-1">{kpi.unit}</span>
-                  </div>
-                  <p className={`text-sm flex items-center justify-center gap-1 mt-1 font-semibold ${
-                    kpi.trend === "up" ? "text-green-600" : "text-green-600"
-                  }`}>
-                    {kpi.trend === "up" ? (
-                      <TrendingUp className="w-4 h-4" />
-                    ) : (
-                      <TrendingDown className="w-4 h-4" />
-                    )}
-                    {kpi.deltaPercent} vs Last Month
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {/* Performance Section */}
-          <div className="mb-6">
-            <h2 className="text-xl font-bold text-[#000000] mb-4 flex items-center gap-2">
-              <Activity className="w-5 h-5 text-[#F57418]" />
-              Performance Trends
-            </h2>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Processing Time by Product */}
-              <Card className="bg-white border border-[#F5F7F8] shadow-sm">
-                <CardHeader>
-                  <CardTitle className="text-[#000000] font-semibold text-base">
-                    Processing Time by Product (Minutes)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={220}>
-                    <LineChart data={processingTimeByProduct}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                      <XAxis dataKey="month" tick={{ fill: "#5F5F5F", fontSize: 12 }} />
-                      <YAxis tick={{ fill: "#5F5F5F", fontSize: 12 }} />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "#FFFFFF",
-                          border: "1px solid #F57418",
-                        }}
-                      />
-                      <Legend
-                        wrapperStyle={{ fontSize: 11 }}
-                        formatter={(value) => <span style={{ color: "#000000" }}>{value}</span>}
-                      />
-                      <Line type="monotone" dataKey="ocrOnly" stroke={colors.lightPink} strokeWidth={2} name="OCR Only" dot={{ r: 3 }} />
-                      <Line type="monotone" dataKey="fullSuite" stroke={colors.lightBlue} strokeWidth={2} name="Full Suite" dot={{ r: 3 }} />
-                      <Line type="monotone" dataKey="clarusComplete" stroke={colors.solidOrange} strokeWidth={2} name="Clarus Complete" dot={{ r: 3 }} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-
-              {/* MRS Accuracy Over Time */}
-              <Card className="bg-white border border-[#F5F7F8] shadow-sm">
-                <CardHeader>
-                  <CardTitle className="text-[#000000] font-semibold text-base">
-                    MRS Accuracy by Model Version
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={220}>
-                    <AreaChart data={mrsAccuracyData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                      <XAxis dataKey="version" tick={{ fill: "#5F5F5F", fontSize: 12 }} />
-                      <YAxis domain={[75, 100]} tick={{ fill: "#5F5F5F", fontSize: 12 }} />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "#FFFFFF",
-                          border: "1px solid #F57418",
-                        }}
-                      />
-                      <Area
-                        type="monotone"
-                        dataKey="accuracy"
-                        stroke={colors.solidOrange}
-                        fill={colors.gradientOrange1}
-                        fillOpacity={0.3}
-                        name="Accuracy %"
-                      />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-
-              {/* System Uptime */}
-              <Card className="bg-white border border-[#F5F7F8] shadow-sm">
-                <CardHeader>
-                  <CardTitle className="text-[#000000] font-semibold text-base">
-                    System Uptime (Target: 99.9%)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={220}>
-                    <BarChart data={systemUptimeData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                      <XAxis dataKey="week" tick={{ fill: "#5F5F5F", fontSize: 12 }} />
-                      <YAxis domain={[99.8, 100]} tick={{ fill: "#5F5F5F", fontSize: 12 }} />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "#FFFFFF",
-                          border: "1px solid #F57418",
-                        }}
-                        formatter={(value: number) => [`${value.toFixed(2)}%`, "Uptime"]}
-                      />
-                      <Bar dataKey="uptime" fill={colors.green} name="Uptime %" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                  <div className="mt-2 flex items-center justify-center gap-2">
-                    <div className="h-1 w-full bg-[#E5E7EB] rounded">
-                      <div className="h-1 bg-red-500 rounded" style={{ width: "0.1%" }} />
-                    </div>
-                    <span className="text-xs text-[#5F5F5F] whitespace-nowrap">99.9% Target</span>
-                  </div>
-                </CardContent>
-              </Card>
+      <main className="max-w-7xl mx-auto px-4 py-6">
+        {/* PAGE 1: EXECUTIVE OVERVIEW */}
+        {currentPage === "executive" && (
+          <div className="space-y-6">
+            {/* Top KPI Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <KPICard
+                title="STP Rate"
+                value={executiveKPIs.stpRate}
+                subtitle="Claim automation completed / submitted"
+                icon={CheckCircle2}
+                alert={true}
+              />
+              <KPICard
+                title="Clarus-Complete Rate"
+                value={executiveKPIs.clarusRate}
+                subtitle="Internal automation completion"
+                icon={Zap}
+              />
+              <KPICard
+                title="Avg Claims Processing Time"
+                value={executiveKPIs.procTime}
+                subtitle={executiveKPIs.procTimeDetails}
+                icon={Clock}
+              />
+              <KPICard
+                title="Estimate Completion Rate"
+                value={executiveKPIs.estimateRate}
+                subtitle="Estimates completing intended scope"
+                icon={CheckCircle2}
+              />
+              <KPICard
+                title="Total Savings"
+                value={executiveKPIs.fteSavings}
+                subtitle="FTEs saved | 12.5 mins/claim"
+                icon={DollarSign}
+              />
+              <KPICard
+                title="System Uptime"
+                value={executiveKPIs.uptime}
+                subtitle={`Target: ${executiveKPIs.targetUptime}`}
+                icon={Zap}
+              />
             </div>
-          </div>
 
-          {/* Pipeline & Fallout Section */}
-          <div className="mb-6">
-            <h2 className="text-xl font-bold text-[#000000] mb-4 flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-[#F57418]" />
-              Pipeline & Fallout Analysis
-            </h2>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Fallout Funnel */}
-              <Card className="bg-white border border-[#F5F7F8] shadow-sm lg:col-span-1">
+            {/* Charts Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Automation Pipeline Funnel */}
+              <Card className="bg-white border border-[#E5E7EB] shadow-sm">
                 <CardHeader>
-                  <CardTitle className="text-[#000000] font-semibold text-base">
-                    Claims Pipeline Funnel
+                  <CardTitle className="text-[#000000] font-semibold flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5 text-[#F57418]" />
+                    Automation Pipeline Health & Bottlenecks
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ResponsiveContainer width="100%" height={280}>
+                  <ResponsiveContainer width="100%" height={300}>
                     <FunnelChart>
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "#FFFFFF",
-                          border: "1px solid #F57418",
-                        }}
-                        formatter={(value: number) => [value.toLocaleString(), "Claims"]}
-                      />
-                      <Funnel
-                        dataKey="value"
-                        data={falloutFunnelData}
-                        isAnimationActive
-                      >
-                        <LabelList position="center" fill="#000" fontSize={11} formatter={(value: number) => value.toLocaleString()} />
+                      <Tooltip formatter={(value) => `${value.toLocaleString()}`} />
+                      <Funnel dataKey="value" data={automationPipelineData}>
+                        <LabelList dataKey="name" fill="#000000" position="insideLeft" />
+                        {automationPipelineData.map((_, idx) => (
+                          <Cell key={`cell-${idx}`} fill={["#10b981", "#3b82f6", "#f59e0b", "#f87171", "#8b5cf6"][idx]} />
+                        ))}
                       </Funnel>
                     </FunnelChart>
                   </ResponsiveContainer>
-                  <div className="mt-2 space-y-1">
-                    {falloutFunnelData.map((item, idx) => (
-                      <div key={idx} className="flex items-center justify-between text-xs">
-                        <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 rounded" style={{ backgroundColor: item.fill }} />
-                          <span className="text-[#5F5F5F]">{item.name}</span>
+                </CardContent>
+              </Card>
+
+              {/* OCR & MRS Accuracy */}
+              <Card className="bg-white border border-[#E5E7EB] shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-[#000000] font-semibold">Core Intelligence & OCR Success</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <ComposedChart data={ocrSuccessData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                      <XAxis dataKey="month" stroke="#5F5F5F" />
+                      <YAxis stroke="#5F5F5F" />
+                      <Tooltip contentStyle={{ backgroundColor: "#fff", border: "1px solid #E5E7EB" }} />
+                      <Legend />
+                      <Bar dataKey="ocrSuccess" fill="#10b981" name="OCR Success %" />
+                      <Bar dataKey="caladan" fill="#3b82f6" name="Caladan Throughput %" />
+                      <Bar dataKey="fallback" fill="#ef4444" name="Fallback %" />
+                      <Line type="monotone" dataKey="mrsAccuracy" stroke="#F57418" name="MRS Accuracy %" strokeWidth={2} />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              {/* Efficiency Gain by Product */}
+              <Card className="bg-white border border-[#E5E7EB] shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-[#000000] font-semibold">Efficiency Gain & Processing Speed by Product Set</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={processingTimeByProduct}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                      <XAxis dataKey="product" stroke="#5F5F5F" />
+                      <YAxis yAxisId="left" stroke="#5F5F5F" label={{ value: "Processing Time (sec)", angle: -90, position: "insideLeft" }} />
+                      <YAxis yAxisId="right" orientation="right" stroke="#5F5F5F" label={{ value: "Human Mins Saved", angle: 90, position: "insideRight" }} />
+                      <Tooltip contentStyle={{ backgroundColor: "#fff", border: "1px solid #E5E7EB" }} />
+                      <Legend />
+                      <Bar yAxisId="left" dataKey="time" fill="#3b82f6" name="Avg Processing Time (sec)" />
+                      <Bar yAxisId="right" dataKey="savings" fill="#10b981" name="Human Minutes Saved" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              {/* MGA Onboarding Progress */}
+              <Card className="bg-white border border-[#E5E7EB] shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-[#000000] font-semibold">Product Adoption & Onboarding Progress</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {mgaOnboardingData.map((mga) => (
+                      <div key={mga.name} className="space-y-1">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium text-[#000000]">{mga.name}</span>
+                          <Badge className={mga.status === "Complete" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}>
+                            {mga.connected}/{mga.target}
+                          </Badge>
                         </div>
-                        <span className="font-semibold text-[#000000]">{item.value.toLocaleString()}</span>
+                        <div className="w-full bg-[#E5E7EB] rounded-full h-2 overflow-hidden">
+                          <div
+                            className="bg-[#F57418] h-full transition-all"
+                            style={{ width: `${(mga.connected / mga.target) * 100}%` }}
+                          />
+                        </div>
                       </div>
                     ))}
                   </div>
                 </CardContent>
               </Card>
+            </div>
+          </div>
+        )}
 
-              {/* Treatment Mapping Fallout */}
-              <Card className="bg-white border border-[#F5F7F8] shadow-sm">
+        {/* PAGE 2: FINANCE & CLAIMS DEEP-DIVE */}
+        {currentPage === "finance" && (
+          <div className="space-y-6">
+            {/* Financial KPI Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <KPICard
+                title="Financial Accuracy Rate"
+                value={financeKPIs.financialAccuracy}
+                subtitle="1 - (variance / completed)"
+                icon={CheckCircle2}
+              />
+              <KPICard
+                title="Net Financial Variance"
+                value={financeKPIs.netVariance}
+                subtitle={`Overpaid: ${financeKPIs.overpaid} | Underpaid: ${financeKPIs.underpaid}`}
+                icon={DollarSign}
+              />
+              <KPICard
+                title="Billing Accuracy"
+                value={financeKPIs.billingAccuracy}
+                subtitle="1 - (disputes / closed)"
+                icon={CheckCircle2}
+              />
+              <KPICard
+                title="Feedback Loop Coverage"
+                value={financeKPIs.feedbackCoverage}
+                subtitle="Claim IDs with feedback / completed"
+                icon={Users}
+              />
+            </div>
+
+            {/* Finance Charts Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Revenue by Product by MGA */}
+              <Card className="bg-white border border-[#E5E7EB] shadow-sm">
                 <CardHeader>
-                  <CardTitle className="text-[#000000] font-semibold text-base">
-                    Treatment Mapping Fallout
-                  </CardTitle>
+                  <CardTitle className="text-[#000000] font-semibold">Revenue by Product by MGA</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ResponsiveContainer width="100%" height={200}>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={revenueByProductMGA} layout="vertical">
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                      <XAxis type="number" stroke="#5F5F5F" />
+                      <YAxis dataKey="mga" type="category" stroke="#5F5F5F" width={100} />
+                      <Tooltip formatter={(value) => `$${(value / 1000).toFixed(0)}k`} contentStyle={{ backgroundColor: "#fff", border: "1px solid #E5E7EB" }} />
+                      <Legend />
+                      <Bar dataKey="ocrOnly" fill="#10b981" name="OCR Only" />
+                      <Bar dataKey="ocrClaims" fill="#3b82f6" name="OCR + Claims" />
+                      <Bar dataKey="fullSuite" fill="#F57418" name="Full Suite" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              {/* MGA Rule Alignment & Overrides */}
+              <Card className="bg-white border border-[#E5E7EB] shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-[#000000] font-semibold">MGA Rule Alignment & Overrides</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={mgaRuleAlignmentData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                      <XAxis dataKey="mga" stroke="#5F5F5F" angle={-45} textAnchor="end" height={80} />
+                      <YAxis stroke="#5F5F5F" />
+                      <Tooltip formatter={(value) => `${value.toFixed(1)}%`} contentStyle={{ backgroundColor: "#fff", border: "1px solid #E5E7EB" }} />
+                      <Legend />
+                      <Bar dataKey="passThrough" fill="#10b981" name="Pass-Through %" />
+                      <Bar dataKey="treatmentMapping" fill="#f59e0b" name="Treatment Mapping %" />
+                      <Bar dataKey="preEx" fill="#f87171" name="Pre-Ex %" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              {/* Invoice Alteration Detection */}
+              <Card className="bg-white border border-[#E5E7EB] shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-[#000000] font-semibold">Risk & Fraud Detection</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={250}>
                     <PieChart>
                       <Pie
-                        data={treatmentMappingFallout}
+                        data={invoiceAlterationData}
                         cx="50%"
                         cy="50%"
-                        innerRadius={50}
+                        labelLine={false}
+                        label={({ name, value, percent }) => `${name}: ${value} (${(percent * 100).toFixed(1)}%)`}
                         outerRadius={80}
-                        paddingAngle={2}
+                        fill="#8884d8"
                         dataKey="value"
                       >
-                        {treatmentMappingFallout.map((entry, index) => (
+                        {invoiceAlterationData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.fill} />
                         ))}
                       </Pie>
-                      <Tooltip formatter={(value: number) => [`${value}%`]} />
+                      <Tooltip formatter={(value) => value.toLocaleString()} />
                     </PieChart>
                   </ResponsiveContainer>
-                  <div className="text-center mt-2">
-                    <div className="text-2xl font-bold text-[#000000]">82%</div>
-                    <p className="text-sm text-[#5F5F5F]">Successfully Mapped</p>
-                    <Badge className="mt-2 bg-yellow-100 text-yellow-800">
-                      Target: 90% - Action Required
-                    </Badge>
-                  </div>
                 </CardContent>
               </Card>
 
-              {/* Override Rate */}
-              <Card className="bg-white border border-[#F5F7F8] shadow-sm">
+              {/* Claim Audit Coverage Gauge */}
+              <Card className="bg-white border border-[#E5E7EB] shadow-sm">
                 <CardHeader>
-                  <CardTitle className="text-[#000000] font-semibold text-base">
-                    Override Rate by Recommendation
-                  </CardTitle>
+                  <CardTitle className="text-[#000000] font-semibold">Claim Audit Coverage</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={260}>
-                    <BarChart data={overrideRateData} layout="vertical">
-                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                      <XAxis type="number" domain={[0, 100]} tick={{ fill: "#5F5F5F", fontSize: 11 }} />
-                      <YAxis dataKey="category" type="category" tick={{ fill: "#5F5F5F", fontSize: 11 }} width={90} />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "#FFFFFF",
-                          border: "1px solid #F57418",
-                        }}
-                      />
-                      <Legend
-                        wrapperStyle={{ fontSize: 11 }}
-                        formatter={(value) => <span style={{ color: "#000000" }}>{value}</span>}
-                      />
-                      <Bar dataKey="confirmed" stackId="a" fill={colors.green} name="Confirmed" />
-                      <Bar dataKey="overridden" stackId="a" fill={colors.red} name="Overridden" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          {/* Product & Revenue Section */}
-          <div className="mb-6">
-            <h2 className="text-xl font-bold text-[#000000] mb-4 flex items-center gap-2">
-              <Target className="w-5 h-5 text-[#F57418]" />
-              Product & Adoption
-            </h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Practice Connect Rate */}
-              <Card className="bg-white border border-[#F5F7F8] shadow-sm">
-                <CardHeader>
-                  <CardTitle className="text-[#000000] font-semibold text-base">
-                    Practice Connect Rate (Last 12 Months)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={250}>
-                    <BarChart data={practiceConnectData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                      <XAxis dataKey="month" tick={{ fill: "#5F5F5F", fontSize: 12 }} />
-                      <YAxis tick={{ fill: "#5F5F5F", fontSize: 12 }} />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "#FFFFFF",
-                          border: "1px solid #F57418",
-                        }}
-                      />
-                      <Legend
-                        wrapperStyle={{ fontSize: 11 }}
-                        formatter={(value) => <span style={{ color: "#000000" }}>{value}</span>}
-                      />
-                      <Bar dataKey="connected" stackId="a" fill={colors.solidOrange} name="Connected Practice" />
-                      <Bar dataKey="ocr" stackId="a" fill={colors.lightBlue} name="Source: OCR" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-
-              {/* Product Combination Adoption */}
-              <Card className="bg-white border border-[#F5F7F8] shadow-sm">
-                <CardHeader>
-                  <CardTitle className="text-[#000000] font-semibold text-base">
-                    Product Bundle Adoption (MGA Base)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={250}>
-                    <Treemap
-                      data={productAdoptionTreemap}
-                      dataKey="size"
-                      aspectRatio={4 / 3}
-                      stroke="#fff"
-                      fill="#F57418"
-                    >
-                      {productAdoptionTreemap.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.fill} />
-                      ))}
-                    </Treemap>
-                  </ResponsiveContainer>
-                  <div className="mt-3 grid grid-cols-3 gap-2">
-                    {productAdoptionTreemap.map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-xs">
-                        <div className="w-3 h-3 rounded" style={{ backgroundColor: item.fill }} />
-                        <span className="text-[#5F5F5F]">{item.name}: {item.size}%</span>
-                      </div>
-                    ))}
+                <CardContent className="flex items-center justify-center h-250">
+                  <div className="text-center">
+                    <div className="text-5xl font-bold text-[#F57418]">87.3%</div>
+                    <div className="text-sm text-[#5F5F5F] mt-2">Claims with Complete Audit Trail</div>
+                    <div className="text-xs text-[#5F5F5F] mt-4">Target: 95% | Current: 87.3%</div>
                   </div>
                 </CardContent>
               </Card>
             </div>
-          </div>
 
-          {/* Diagnostic Data Table (Collapsible) */}
-          <Collapsible open={isDiagnosticOpen} onOpenChange={setIsDiagnosticOpen}>
+            {/* Claim-Level Detail Audit Table */}
             <Card className="bg-white border border-[#E5E7EB] shadow-sm">
-              <CollapsibleTrigger asChild>
-                <CardHeader className="cursor-pointer hover:bg-[#F5F7F8] transition-colors">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-[#000000] font-semibold text-base flex items-center gap-2">
-                      Diagnostic Data (Lower Priority)
-                    </CardTitle>
-                    {isDiagnosticOpen ? (
-                      <ChevronUp className="w-5 h-5 text-[#5F5F5F]" />
-                    ) : (
-                      <ChevronDown className="w-5 h-5 text-[#5F5F5F]" />
-                    )}
-                  </div>
-                </CardHeader>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <CardContent className="space-y-6">
-                  {/* MGA Onboarding Progress */}
-                  <div>
-                    <h4 className="font-semibold text-[#000000] mb-3">MGA Onboarding Progress</h4>
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-sm">
-                        <thead>
-                          <tr className="border-b border-[#E5E7EB] bg-[#F9FAFB]">
-                            <th className="text-left py-2 px-3 font-semibold text-[#000000]">MGA Name</th>
-                            <th className="text-left py-2 px-3 font-semibold text-[#000000]">Status</th>
-                            <th className="text-left py-2 px-3 font-semibold text-[#000000]">Progress</th>
-                            <th className="text-right py-2 px-3 font-semibold text-[#000000]">Claims Processed</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {mgaOnboardingData.map((row, idx) => (
-                            <tr key={idx} className="border-b border-[#E5E7EB] hover:bg-[#F9FAFB]">
-                              <td className="py-2 px-3 text-[#000000] font-medium">{row.name}</td>
-                              <td className="py-2 px-3">
-                                <Badge className={
-                                  row.status === "Active" ? "bg-green-100 text-green-800" :
-                                  row.status === "Onboarding" ? "bg-yellow-100 text-yellow-800" :
-                                  "bg-gray-100 text-gray-800"
-                                }>
-                                  {row.status}
-                                </Badge>
-                              </td>
-                              <td className="py-2 px-3">
-                                <div className="flex items-center gap-2">
-                                  <div className="w-24 bg-[#E5E7EB] rounded-full h-2">
-                                    <div
-                                      className="bg-[#F57418] h-2 rounded-full"
-                                      style={{ width: `${row.progress}%` }}
-                                    />
-                                  </div>
-                                  <span className="text-xs text-[#5F5F5F]">{row.progress}%</span>
-                                </div>
-                              </td>
-                              <td className="py-2 px-3 text-right text-[#000000]">{row.claims.toLocaleString()}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-
-                  {/* Financial Variance */}
-                  <div>
-                    <h4 className="font-semibold text-[#000000] mb-3">High Variance Claims (Finance Review)</h4>
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-sm">
-                        <thead>
-                          <tr className="border-b border-[#E5E7EB] bg-[#F9FAFB]">
-                            <th className="text-left py-2 px-3 font-semibold text-[#000000]">Claim ID</th>
-                            <th className="text-left py-2 px-3 font-semibold text-[#000000]">Variance</th>
-                            <th className="text-left py-2 px-3 font-semibold text-[#000000]">Reason</th>
-                            <th className="text-left py-2 px-3 font-semibold text-[#000000]">Reviewer</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {financialVarianceData.map((row, idx) => (
-                            <tr key={idx} className="border-b border-[#E5E7EB] hover:bg-[#F9FAFB]">
-                              <td className="py-2 px-3 text-[#F57418] font-medium">{row.claimId}</td>
-                              <td className="py-2 px-3 text-red-600 font-semibold">{row.variance}</td>
-                              <td className="py-2 px-3 text-[#5F5F5F]">{row.reason}</td>
-                              <td className="py-2 px-3 text-[#000000]">{row.reviewer}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </CardContent>
-              </CollapsibleContent>
-            </Card>
-          </Collapsible>
-
-          {/* Detailed Data Tables Section */}
-          <div className="mt-6 space-y-6">
-            <h2 className="text-xl font-bold text-[#000000] flex items-center gap-2">
-              <svg className="w-5 h-5 text-[#F57418]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
-              </svg>
-              Detailed Data Tables (Lowest Grain)
-            </h2>
-
-            {/* Claims Detail Matrix */}
-            <Card className="bg-white border border-[#E5E7EB] shadow-sm">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-[#000000] font-semibold text-base flex items-center justify-between">
-                  <span>Individual Claims Detail</span>
-                  <Badge className="bg-[#F57418] text-white">{detailedClaimsData.length} Records</Badge>
+              <CardHeader>
+                <CardTitle className="text-[#000000] font-semibold flex items-center justify-between">
+                  <span>Claim-Level Detail Audit Table</span>
+                  <Badge className="bg-[#F57418] text-white">{claimDetailData.length} Claims</Badge>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -845,88 +615,36 @@ export default function ClaimsAutomationDashboard() {
                       </tr>
                     </thead>
                     <tbody>
-                      {detailedClaimsData.map((claim, idx) => (
-                        <tr key={idx} className={`border-b border-[#E5E7EB] hover:bg-[#FEF3E7] transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-[#FAFAFA]'}`}>
-                          <td className="py-2 px-2 text-[#F57418] font-semibold">{claim.claimId}</td>
-                          <td className="py-2 px-2 text-[#5F5F5F]">{claim.submissionDate}</td>
-                          <td className="py-2 px-2 text-[#000000] font-medium">{claim.mga}</td>
-                          <td className="py-2 px-2 text-[#000000]">{claim.petName}</td>
-                          <td className="py-2 px-2 text-[#5F5F5F]">{claim.species}</td>
-                          <td className="py-2 px-2 text-[#5F5F5F]">{claim.breed}</td>
-                          <td className="py-2 px-2">
-                            <Badge className={claim.claimType === "Claim" ? "bg-blue-100 text-blue-800" : "bg-purple-100 text-purple-800"}>
-                              {claim.claimType}
-                            </Badge>
-                          </td>
-                          <td className="py-2 px-2 text-[#5F5F5F]">{claim.product}</td>
-                          <td className="py-2 px-2 text-right text-[#000000] font-medium">{claim.invoiceAmount}</td>
-                          <td className="py-2 px-2 text-right text-[#000000] font-semibold">{claim.approvedAmount}</td>
-                          <td className="py-2 px-2 text-center">
+                      {claimDetailData.map((claim, idx) => (
+                        <tr key={idx} className={`border-b border-[#E5E7EB] hover:bg-[#FEF3E7] transition-colors ${idx % 2 === 0 ? "bg-white" : "bg-[#FAFAFA]"}`}>
+                          <td className="py-2 px-3 text-[#F57418] font-semibold hover:underline cursor-pointer">{claim.id}</td>
+                          <td className="py-2 px-3 text-[#000000] font-medium">{claim.mga}</td>
+                          <td className="py-2 px-3 text-[#5F5F5F]">{claim.product}</td>
+                          <td className="py-2 px-3 text-center text-[#000000]">{claim.time}</td>
+                          <td className="py-2 px-3 text-center">
                             <Badge className={
-                              claim.stpStatus === "Auto-Approved" ? "bg-green-100 text-green-800" :
-                              claim.stpStatus === "Manual Review" ? "bg-yellow-100 text-yellow-800" :
-                              claim.stpStatus === "Pending" ? "bg-blue-100 text-blue-800" :
+                              claim.status === "STP Complete" ? "bg-green-100 text-green-800" :
+                              claim.status === "Clarus Complete" ? "bg-blue-100 text-blue-800" :
+                              claim.status === "MGA Stopped" ? "bg-amber-100 text-amber-800" :
                               "bg-red-100 text-red-800"
                             }>
-                              {claim.stpStatus}
+                              {claim.status}
                             </Badge>
                           </td>
-                          <td className="py-2 px-2 text-center text-[#5F5F5F]">{claim.processingTime}</td>
-                          <td className="py-2 px-2 text-center">
-                            <span className={parseFloat(claim.ocrConfidence) >= 95 ? "text-green-600 font-semibold" : parseFloat(claim.ocrConfidence) >= 90 ? "text-yellow-600" : "text-red-600"}>
-                              {claim.ocrConfidence}
-                            </span>
-                          </td>
-                          <td className="py-2 px-2 text-[#5F5F5F]">{claim.region}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Treatment Mapping Detail */}
-            <Card className="bg-white border border-[#E5E7EB] shadow-sm">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-[#000000] font-semibold text-base flex items-center justify-between">
-                  <span>Treatment Mapping Detail</span>
-                  <div className="flex gap-2">
-                    <Badge className="bg-green-100 text-green-800">7 Mapped</Badge>
-                    <Badge className="bg-red-100 text-red-800">3 Fallout</Badge>
-                  </div>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-xs">
-                    <thead>
-                      <tr className="border-b-2 border-[#F57418] bg-[#FEF3E7]">
-                        <th className="text-left py-2 px-3 font-bold text-[#000000]">Treatment Code</th>
-                        <th className="text-left py-2 px-3 font-bold text-[#000000]">Treatment Description</th>
-                        <th className="text-left py-2 px-3 font-bold text-[#000000]">Mapped To</th>
-                        <th className="text-center py-2 px-3 font-bold text-[#000000]">Confidence</th>
-                        <th className="text-center py-2 px-3 font-bold text-[#000000]">Status</th>
-                        <th className="text-right py-2 px-3 font-bold text-[#000000]">Claims Count</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {treatmentMappingDetails.map((treatment, idx) => (
-                        <tr key={idx} className={`border-b border-[#E5E7EB] hover:bg-[#FEF3E7] transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-[#FAFAFA]'}`}>
-                          <td className="py-2 px-3 text-[#F57418] font-mono font-semibold">{treatment.treatmentCode}</td>
-                          <td className="py-2 px-3 text-[#000000]">{treatment.treatmentDesc}</td>
-                          <td className="py-2 px-3 text-[#5F5F5F]">{treatment.mappedTo || <span className="text-red-500 italic">Unmapped</span>}</td>
-                          <td className="py-2 px-3 text-center">
-                            <span className={parseFloat(treatment.confidence) >= 90 ? "text-green-600 font-semibold" : parseFloat(treatment.confidence) >= 70 ? "text-yellow-600" : "text-red-600 font-semibold"}>
-                              {treatment.confidence}
+                          <td className="py-2 px-3 text-[#5F5F5F]">{claim.override}</td>
+                          <td className="py-2 px-3 text-right font-semibold">
+                            <span className={claim.variance.startsWith("+") ? "text-red-600" : claim.variance.startsWith("-") ? "text-green-600" : "text-[#000000]"}>
+                              {claim.variance}
                             </span>
                           </td>
                           <td className="py-2 px-3 text-center">
-                            <Badge className={treatment.status === "Mapped" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>
-                              {treatment.status}
+                            {claim.fraud ? <span className="text-red-600 font-bold">⚠</span> : <span className="text-green-600">✓</span>}
+                          </td>
+                          <td className="py-2 px-3 text-center">
+                            <Badge className={claim.audit === "Complete" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>
+                              {claim.audit}
                             </Badge>
                           </td>
-                          <td className="py-2 px-3 text-right text-[#000000] font-medium">{treatment.claimsCount.toLocaleString()}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -1001,12 +719,7 @@ export default function ClaimsAutomationDashboard() {
               </CardContent>
             </Card>
           </div>
-
-          {/* Footer */}
-          <div className="mt-6 text-center text-sm text-[#5F5F5F]">
-            Last Updated: April 26, 2026 | Data refreshes every 24 hours
-          </div>
-        </div>
+        )}
       </main>
     </div>
   )
