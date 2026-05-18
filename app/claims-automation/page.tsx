@@ -198,10 +198,48 @@ const financeKPIs = {
   financialAccuracy: "96.4%",
   netVariance: "$12,450",
   overpaid: "$8,100",
-  underpaid: "$4,350",
-  billingAccuracy: "99.8%",
-  feedbackCoverage: "85.2%",
+  underpaid: "-$4,350",
+  billingAccuracy: "98.7%",
+  feedbackCoverage: "87.3%",
 }
+
+// ==================== DETAILED DATA TABLES ====================
+const detailedClaimsData = [
+  { claimId: "CLM-82341", submissionDate: "2026-04-25", mga: "Trupanion", petName: "Max", species: "Dog", breed: "Golden Retriever", claimType: "Claim", product: "Clarus Complete", invoiceAmount: "$1,245.00", approvedAmount: "$1,120.50", stpStatus: "Auto-Approved", processingTime: "1.2 min", ocrConfidence: "98.2%", region: "Northeast" },
+  { claimId: "CLM-82342", submissionDate: "2026-04-25", mga: "Nationwide", petName: "Whiskers", species: "Cat", breed: "Persian", claimType: "Estimate", product: "OCR + Fraud", invoiceAmount: "$567.00", approvedAmount: "$510.30", stpStatus: "Manual Review", processingTime: "4.5 min", ocrConfidence: "89.1%", region: "Southeast" },
+  { claimId: "CLM-82343", submissionDate: "2026-04-25", mga: "PetFirst", petName: "Buddy", species: "Dog", breed: "Labrador", claimType: "Claim", product: "Clarus Complete", invoiceAmount: "$2,890.00", approvedAmount: "$2,601.00", stpStatus: "Auto-Approved", processingTime: "0.9 min", ocrConfidence: "99.1%", region: "West" },
+  { claimId: "CLM-82344", submissionDate: "2026-04-25", mga: "Trupanion", petName: "Luna", species: "Dog", breed: "French Bulldog", claimType: "Claim", product: "Full Suite", invoiceAmount: "$892.00", approvedAmount: "$802.80", stpStatus: "Auto-Approved", processingTime: "1.1 min", ocrConfidence: "97.8%", region: "Midwest" },
+  { claimId: "CLM-82345", submissionDate: "2026-04-24", mga: "Nationwide", petName: "Mittens", species: "Cat", breed: "Siamese", claimType: "Claim", product: "OCR Only", invoiceAmount: "$345.00", approvedAmount: "$0.00", stpStatus: "Denied", processingTime: "2.3 min", ocrConfidence: "94.5%", region: "Northeast" },
+  { claimId: "CLM-82346", submissionDate: "2026-04-24", mga: "PetFirst", petName: "Rocky", species: "Dog", breed: "German Shepherd", claimType: "Claim", product: "Clarus Complete", invoiceAmount: "$1,678.00", approvedAmount: "$1,510.20", stpStatus: "Auto-Approved", processingTime: "1.0 min", ocrConfidence: "98.9%", region: "Southeast" },
+  { claimId: "CLM-82347", submissionDate: "2026-04-24", mga: "Trupanion", petName: "Bella", species: "Dog", breed: "Poodle", claimType: "Estimate", product: "Full Suite", invoiceAmount: "$456.00", approvedAmount: "$410.40", stpStatus: "Pending", processingTime: "—", ocrConfidence: "96.2%", region: "West" },
+  { claimId: "CLM-82348", submissionDate: "2026-04-24", mga: "Nationwide", petName: "Charlie", species: "Dog", breed: "Beagle", claimType: "Claim", product: "OCR + Fraud", invoiceAmount: "$789.00", approvedAmount: "$710.10", stpStatus: "Auto-Approved", processingTime: "1.4 min", ocrConfidence: "97.3%", region: "Midwest" },
+  { claimId: "CLM-82349", submissionDate: "2026-04-23", mga: "PetFirst", petName: "Oliver", species: "Cat", breed: "Maine Coon", claimType: "Claim", product: "Clarus Complete", invoiceAmount: "$1,234.00", approvedAmount: "$1,110.60", stpStatus: "Auto-Approved", processingTime: "0.8 min", ocrConfidence: "99.4%", region: "Northeast" },
+  { claimId: "CLM-82350", submissionDate: "2026-04-23", mga: "Trupanion", petName: "Daisy", species: "Dog", breed: "Bulldog", claimType: "Claim", product: "Full Suite", invoiceAmount: "$2,345.00", approvedAmount: "$2,110.50", stpStatus: "Manual Review", processingTime: "5.2 min", ocrConfidence: "85.6%", region: "Southeast" },
+]
+
+const treatmentMappingDetails = [
+  { treatmentCode: "VACC-001", treatmentDesc: "Annual Vaccination", mappedTo: "Preventive Care - Vaccines", confidence: "99.8%", status: "Mapped", claimsCount: 1245 },
+  { treatmentCode: "SURG-042", treatmentDesc: "ACL Repair Surgery", mappedTo: "Orthopedic Surgery - Knee", confidence: "98.5%", status: "Mapped", claimsCount: 89 },
+  { treatmentCode: "DENT-015", treatmentDesc: "Dental Cleaning", mappedTo: "Dental - Routine Cleaning", confidence: "97.2%", status: "Mapped", claimsCount: 456 },
+  { treatmentCode: "DIAG-088", treatmentDesc: "MRI Scan", mappedTo: "Diagnostic Imaging - MRI", confidence: "99.1%", status: "Mapped", claimsCount: 234 },
+  { treatmentCode: "EMER-003", treatmentDesc: "Emergency Triage", mappedTo: null, confidence: "45.2%", status: "Fallout", claimsCount: 67 },
+  { treatmentCode: "SPEC-129", treatmentDesc: "Specialty Consult", mappedTo: null, confidence: "52.8%", status: "Fallout", claimsCount: 34 },
+  { treatmentCode: "LAB-056", treatmentDesc: "Blood Panel CBC", mappedTo: "Laboratory - Blood Work", confidence: "98.9%", status: "Mapped", claimsCount: 892 },
+  { treatmentCode: "PHARM-201", treatmentDesc: "Antibiotics Course", mappedTo: "Pharmacy - Antibiotics", confidence: "96.7%", status: "Mapped", claimsCount: 567 },
+  { treatmentCode: "HOSP-012", treatmentDesc: "Overnight Monitoring", mappedTo: "Hospitalization - Monitoring", confidence: "94.3%", status: "Mapped", claimsCount: 123 },
+  { treatmentCode: "THER-045", treatmentDesc: "Physical Therapy Session", mappedTo: null, confidence: "61.4%", status: "Fallout", claimsCount: 45 },
+]
+
+const mgaPerformanceMatrix = [
+  { mga: "Trupanion", totalClaims: 2845, stpRate: "82.4%", avgProcessingTime: "1.8 min", ocrSuccessRate: "96.2%", overrideRate: "12.3%", revenue: "$892,450", fteSavings: "4.2" },
+  { mga: "Nationwide", totalClaims: 1923, stpRate: "76.8%", avgProcessingTime: "2.4 min", ocrSuccessRate: "93.1%", overrideRate: "18.7%", revenue: "$567,890", fteSavings: "2.8" },
+  { mga: "PetFirst", totalClaims: 1456, stpRate: "79.2%", avgProcessingTime: "2.1 min", ocrSuccessRate: "95.4%", overrideRate: "14.5%", revenue: "$423,560", fteSavings: "2.1" },
+  { mga: "ASPCA Pet", totalClaims: 987, stpRate: "74.5%", avgProcessingTime: "2.8 min", ocrSuccessRate: "91.8%", overrideRate: "21.2%", revenue: "$287,340", fteSavings: "1.4" },
+  { mga: "Embrace", totalClaims: 654, stpRate: "71.2%", avgProcessingTime: "3.1 min", ocrSuccessRate: "89.7%", overrideRate: "24.8%", revenue: "$198,450", fteSavings: "0.9" },
+  { mga: "Pets Best", totalClaims: 512, stpRate: "77.9%", avgProcessingTime: "2.3 min", ocrSuccessRate: "94.2%", overrideRate: "16.1%", revenue: "$156,780", fteSavings: "0.7" },
+  { mga: "Healthy Paws", totalClaims: 423, stpRate: "80.1%", avgProcessingTime: "1.9 min", ocrSuccessRate: "95.8%", overrideRate: "13.4%", revenue: "$134,560", fteSavings: "0.6" },
+  { mga: "Figo", totalClaims: 345, stpRate: "73.6%", avgProcessingTime: "2.7 min", ocrSuccessRate: "92.4%", overrideRate: "19.8%", revenue: "$98,340", fteSavings: "0.5" },
+]
 
 // KPI Card Component
 function KPICard({ title, value, subtitle, icon: Icon, delta, alert, tooltip }) {
