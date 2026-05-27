@@ -262,7 +262,6 @@ export default function MgaMetricsPage() {
                     <th className="text-left py-3 px-3 font-bold text-[#000000] whitespace-nowrap">Metric</th>
                     <th className="text-right py-3 px-3 font-bold text-[#000000] whitespace-nowrap">YTD</th>
                     <th className="text-right py-3 px-3 font-bold text-[#000000] whitespace-nowrap">MTD</th>
-                    <th className="text-center py-3 px-3 font-bold text-[#000000] whitespace-nowrap">Sparkline</th>
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((week) => (
                       <th key={`w-${week}`} className="text-right py-3 px-2 font-bold text-[#000000] whitespace-nowrap">
                         W-{week}
@@ -276,9 +275,7 @@ export default function MgaMetricsPage() {
                       <td className="py-3 px-3 text-[#F57418] font-bold">{row.metric}</td>
                       <td className="py-3 px-3 text-right text-[#000000] font-semibold">{row.ytd.toLocaleString()}</td>
                       <td className="py-3 px-3 text-right text-[#000000] font-semibold">{row.mtd.toLocaleString()}</td>
-                      <td className="py-3 px-2 text-center">
-                        <Sparkline data={row.sparkData} color="#F57418" />
-                      </td>
+                      
                       {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((week) => (
                         <td key={`${idx}-w${week}`} className="py-3 px-2 text-right text-[#5F5F5F]">
                           {row[`W-${week}`].toLocaleString()}
