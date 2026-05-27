@@ -314,18 +314,18 @@ export default function OperationsDashboard() {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-2xl font-bold text-[#000000]">Operations Dashboard</h1>
-            <button
+            {/* <button
               onClick={handleRefresh}
               className="flex items-center gap-2 px-3 py-2 bg-[#F57418] text-white rounded-lg hover:bg-orange-600 transition-colors text-sm font-medium"
             >
               <RefreshCw className="w-4 h-4" />
               Refresh Data
-            </button>
+            </button> */}
           </div>
 
           {/* Global Filters */}
           <div className="flex gap-4 items-end flex-wrap">
-            <div className="flex flex-col gap-1">
+            {/* <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-[#5F5F5F] uppercase tracking-wide">System of Record</label>
               <Select value={selectedSoR} onValueChange={setSelectedSoR}>
                 <SelectTrigger className="w-[180px] bg-[#F5F7F8] border border-[#F57418] text-[#000000]">
@@ -337,7 +337,7 @@ export default function OperationsDashboard() {
                   <SelectItem value="ipg">IPG Managed</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
+            </div> */}
 
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-[#5F5F5F] uppercase tracking-wide">Date Range</label>
@@ -354,13 +354,13 @@ export default function OperationsDashboard() {
               </Select>
             </div>
 
-            <button
+            {/* <button
               onClick={handleExportCSV}
               className="flex items-center gap-2 px-4 py-2 bg-white border border-[#E5E7EB] text-[#000000] rounded-lg hover:bg-[#F5F7F8] transition-colors text-sm font-medium"
             >
               <Download className="w-4 h-4" />
               Export to CSV
-            </button>
+            </button> */}
           </div>
         </div>
 
@@ -377,7 +377,7 @@ export default function OperationsDashboard() {
             >
               Executive Operations Matrix
             </button>
-            <button
+            {/* <button
               onClick={() => setActiveTab("analytics")}
               className={`px-4 py-3 text-sm font-semibold border-b-2 transition-colors ${
                 activeTab === "analytics"
@@ -386,14 +386,14 @@ export default function OperationsDashboard() {
               }`}
             >
               Advanced Visual Analytics
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-6">
         {/* KPI Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {kpiCards.map((card, idx) => (
             <Card key={idx} className="bg-white border border-[#E5E7EB] shadow-sm">
               <CardContent className="p-4">
@@ -410,7 +410,7 @@ export default function OperationsDashboard() {
               </CardContent>
             </Card>
           ))}
-        </div>
+        </div> */}
 
         {/* TAB 1: OPERATIONS MATRIX */}
         {activeTab === "matrix" && (
