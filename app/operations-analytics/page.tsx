@@ -18,25 +18,25 @@ const kpiData = {
 }
 
 const kpiMetrics = [
-  { label: "Straight-Through Processing Rate", value: "35.6%", trend: 2.3, color: "#2563EB" },
-  { label: "vNext Complete Conversion Rate", value: "31.7%", trend: -1.2, color: "#2563EB" },
-  { label: "Caladan OCR Engine Efficiency", value: "78.4%", trend: 4.1, color: "#059669" },
-  { label: "OCR Extraction Success", value: "91.2%", trend: 0.8, color: "#059669" },
-  { label: "Fallback Routing Rate", value: "8.8%", trend: -0.5, color: "#F59E0B" },
-  { label: "Treatment Assignment Drift", value: "19.1%", trend: 1.3, color: "#E11D48" },
+  { label: "Straight-Through Processing Rate", value: "35.6%", trend: 2.3, color: "#000000" },
+  { label: "vNext Complete Conversion Rate", value: "31.7%", trend: -1.2, color: "#000000" },
+  { label: "Caladan OCR Engine Efficiency", value: "78.4%", trend: 4.1, color: "#000000" },
+  { label: "OCR Extraction Success", value: "91.2%", trend: 0.8, color: "#000000" },
+  { label: "Fallback Routing Rate", value: "8.8%", trend: -0.5, color: "#000000" },
+  { label: "Treatment Assignment Drift", value: "19.1%", trend: 1.3, color: "#000000" },
 ]
 
 const funnelData = [
-  { stage: "# Submitted Claims", count: 57684, percentage: 100, color: "#1e3a5f" },
-  { stage: "# Received by vNext", count: 53051, percentage: 91.94, color: "#2d5183" },
-  { stage: "# Verified", count: 52684, percentage: 91.28, color: "#3d6aa7" },
-  { stage: "# Doc. Classified", count: 52684, percentage: 91.28, color: "#4d83cb" },
-  { stage: "# OCR", count: 52670, percentage: 91.25, color: "#5d9cef" },
-  { stage: "# Data Integration", count: 50567, percentage: 87.65, color: "#7eb3f5" },
-  { stage: "# Gate Check", count: 50567, percentage: 87.65, color: "#9ecbf7" },
-  { stage: "# Treatment Assignment", count: 42999, percentage: 74.55, color: "#bde2f9" },
-  { stage: "# Line Item Coding", count: 42999, percentage: 74.55, color: "#ddeffc" },
-  { stage: "# Automation Finalized", count: 17657, percentage: 30.6, color: "#e0f0ff" },
+  { stage: "# Submitted Claims", count: 57684, percentage: 100, color: "#B84D0C" },
+  { stage: "# Received by vNext", count: 53051, percentage: 91.94, color: "#C85E14" },
+  { stage: "# Verified", count: 52684, percentage: 91.28, color: "#D4721B" },
+  { stage: "# Doc. Classified", count: 52684, percentage: 91.28, color: "#E08623" },
+  { stage: "# OCR", count: 52670, percentage: 91.25, color: "#F57418" },
+  { stage: "# Data Integration", count: 50567, percentage: 87.65, color: "#F88E3F" },
+  { stage: "# Gate Check", count: 50567, percentage: 87.65, color: "#FAA65E" },
+  { stage: "# Treatment Assignment", count: 42999, percentage: 74.55, color: "#FBBD7D" },
+  { stage: "# Line Item Coding", count: 42999, percentage: 74.55, color: "#FDD4A3" },
+  { stage: "# Automation Finalized", count: 17657, percentage: 30.6, color: "#FEE8CC" },
 ]
 
 const falloutData = [
@@ -93,7 +93,7 @@ export default function OperationsAnalyticsDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F7F8] p-6">
+    <div className="min-h-screen bg-[#E8EAED] p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* ==================== HEADER & FILTERS ==================== */}
         <div className="bg-white rounded-lg border border-[#E5E7EB] p-6 shadow-sm">
