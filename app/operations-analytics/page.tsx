@@ -334,8 +334,9 @@ export default function OperationsAnalyticsDashboard() {
                       <td className="px-4 py-2 text-[#5F5F5F] font-medium">{row.order}</td>
                       <td className="px-4 py-2 text-[#000000] font-medium">{row.stage}</td>
                       <td className="px-4 py-2 text-right text-[#000000] font-semibold">{row.reached.toLocaleString()}</td>
-                      <td className="px-4 py-2 text-right">
-                        <Badge className="bg-...</td>
+                      <td className="px-4 py-2 text-right text-[#5F5F5F]">{row.reachedPercent}%</td>
+                      <td className="px-4 py-2 text-right text-[#000000] font-semibold">{row.dropped.toLocaleString()}</td>
+                      <td className="px-4 py-2 text-right text-[#5F5F5F]">{row.droppedPercent}%</td>
                     </tr>
                   ))}
                 </tbody>
@@ -345,7 +346,7 @@ export default function OperationsAnalyticsDashboard() {
         </Card>
 
         {/* Footer */}
-        <div className="text-center text-xs text-gray-500 py-4">
+        <div className="text-center text-xs text-[#5F5F5F] py-4">
           Last Updated: April 25, 2026 | Data refreshes every 6 hours
         </div>
       </div>
