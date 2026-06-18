@@ -93,13 +93,13 @@ export default function OperationsAnalyticsDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-[#F5F7F8] p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* ==================== HEADER & FILTERS ==================== */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+        <div className="bg-white rounded-lg border border-[#E5E7EB] p-6 shadow-sm">
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold text-gray-900">Operational Operations Analytics</h1>
-            <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            <h1 className="text-2xl font-bold text-[#000000]">Operational Operations Analytics</h1>
+            <button className="flex items-center gap-2 px-4 py-2 bg-[#F57418] text-white rounded hover:bg-[#E06410]">
               <Download className="w-4 h-4" />
               Export
             </button>
@@ -107,9 +107,9 @@ export default function OperationsAnalyticsDashboard() {
 
           <div className="grid grid-cols-4 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-gray-700 uppercase mb-2">Date Range</label>
+              <label className="block text-xs font-semibold text-[#5F5F5F] uppercase mb-2">Date Range</label>
               <Select value={selectedDateRange} onValueChange={setSelectedDateRange}>
-                <SelectTrigger className="bg-gray-50 border border-gray-300">
+                <SelectTrigger className="bg-[#F5F7F8] border border-[#E5E7EB] text-[#000000]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -122,9 +122,9 @@ export default function OperationsAnalyticsDashboard() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-700 uppercase mb-2">System of Origin</label>
+              <label className="block text-xs font-semibold text-[#5F5F5F] uppercase mb-2">System of Origin</label>
               <Select value={selectedSystem} onValueChange={setSelectedSystem}>
-                <SelectTrigger className="bg-gray-50 border border-gray-300">
+                <SelectTrigger className="bg-[#F5F7F8] border border-[#E5E7EB] text-[#000000]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -137,9 +137,9 @@ export default function OperationsAnalyticsDashboard() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-700 uppercase mb-2">Pipeline Type</label>
+              <label className="block text-xs font-semibold text-[#5F5F5F] uppercase mb-2">Pipeline Type</label>
               <Select value={selectedPipeline} onValueChange={setSelectedPipeline}>
-                <SelectTrigger className="bg-gray-50 border border-gray-300">
+                <SelectTrigger className="bg-[#F5F7F8] border border-[#E5E7EB] text-[#000000]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -152,7 +152,7 @@ export default function OperationsAnalyticsDashboard() {
             </div>
 
             <div className="flex items-end">
-              <button className="w-full px-4 py-2 bg-gray-200 text-gray-800 rounded font-medium hover:bg-gray-300 flex items-center justify-center gap-2">
+              <button className="w-full px-4 py-2 bg-[#F5F7F8] border border-[#E5E7EB] text-[#000000] rounded font-medium hover:bg-[#E5E7EB] flex items-center justify-center gap-2">
                 <Filter className="w-4 h-4" />
                 Apply Filters
               </button>
@@ -162,35 +162,35 @@ export default function OperationsAnalyticsDashboard() {
 
         {/* ==================== SUMMARY BANNER ==================== */}
         <div className="grid grid-cols-4 gap-4">
-          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200">
+          <Card className="bg-white border border-[#E5E7EB]">
             <CardContent className="pt-6">
-              <div className="text-gray-600 text-sm font-medium mb-1">Total Claims Volume</div>
-              <div className="text-3xl font-bold text-blue-900">{(kpiData.totalClaims / 1000).toFixed(1)}K</div>
-              <div className="text-xs text-blue-700 mt-2">681,520 individual claims</div>
+              <div className="text-[#5F5F5F] text-sm font-medium mb-1">Total Claims Volume</div>
+              <div className="text-3xl font-bold text-[#F57418]">{(kpiData.totalClaims / 1000).toFixed(1)}K</div>
+              <div className="text-xs text-[#5F5F5F] mt-2">681,520 individual claims</div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-200">
+          <Card className="bg-white border border-[#E5E7EB]">
             <CardContent className="pt-6">
-              <div className="text-gray-600 text-sm font-medium mb-1">In Progress</div>
-              <div className="text-3xl font-bold text-amber-900">{(kpiData.inProgress / 1000).toFixed(2)}K</div>
-              <div className="text-xs text-amber-700 mt-2">Current pipeline queue</div>
+              <div className="text-[#5F5F5F] text-sm font-medium mb-1">In Progress</div>
+              <div className="text-3xl font-bold text-[#000000]">{(kpiData.inProgress / 1000).toFixed(2)}K</div>
+              <div className="text-xs text-[#5F5F5F] mt-2">Current pipeline queue</div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200">
+          <Card className="bg-white border border-[#E5E7EB]">
             <CardContent className="pt-6">
-              <div className="text-gray-600 text-sm font-medium mb-1">Revenue MTD</div>
-              <div className="text-3xl font-bold text-green-900">${(kpiData.revenueMTD / 1000).toFixed(1)}K</div>
-              <div className="text-xs text-green-700 mt-2">Month-to-date revenue</div>
+              <div className="text-[#5F5F5F] text-sm font-medium mb-1">Revenue MTD</div>
+              <div className="text-3xl font-bold text-[#000000]">${(kpiData.revenueMTD / 1000).toFixed(1)}K</div>
+              <div className="text-xs text-[#5F5F5F] mt-2">Month-to-date revenue</div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200">
+          <Card className="bg-white border border-[#E5E7EB]">
             <CardContent className="pt-6">
-              <div className="text-gray-600 text-sm font-medium mb-1">Revenue YTD</div>
-              <div className="text-3xl font-bold text-purple-900">${(kpiData.revenueYTD / 1000).toFixed(1)}K</div>
-              <div className="text-xs text-purple-700 mt-2">Year-to-date revenue</div>
+              <div className="text-[#5F5F5F] text-sm font-medium mb-1">Revenue YTD</div>
+              <div className="text-3xl font-bold text-[#000000]">${(kpiData.revenueYTD / 1000).toFixed(1)}K</div>
+              <div className="text-xs text-[#5F5F5F] mt-2">Year-to-date revenue</div>
             </CardContent>
           </Card>
         </div>
@@ -198,9 +198,9 @@ export default function OperationsAnalyticsDashboard() {
         {/* ==================== KPI METRICS GRID ==================== */}
         <div className="grid grid-cols-6 gap-4">
           {kpiMetrics.map((metric, idx) => (
-            <Card key={idx} className="bg-white border border-gray-200">
+            <Card key={idx} className="bg-white border border-[#E5E7EB]">
               <CardContent className="pt-6">
-                <div className="text-gray-600 text-xs font-medium mb-3 line-clamp-2">{metric.label}</div>
+                <div className="text-[#5F5F5F] text-xs font-medium mb-3 line-clamp-2">{metric.label}</div>
                 <div className="flex items-end justify-between">
                   <div className="text-2xl font-bold" style={{ color: metric.color }}>
                     {metric.value}
@@ -216,9 +216,9 @@ export default function OperationsAnalyticsDashboard() {
         </div>
 
         {/* ==================== FUNNEL CHART ==================== */}
-        <Card className="bg-white border border-gray-200">
+        <Card className="bg-white border border-[#E5E7EB]">
           <CardHeader>
-            <CardTitle className="text-lg font-bold text-gray-900">Automation Funnel - Claim Processing Pipeline</CardTitle>
+            <CardTitle className="text-lg font-bold text-[#000000]">Automation Funnel - Claim Processing Pipeline</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
@@ -228,11 +228,11 @@ export default function OperationsAnalyticsDashboard() {
                   <button
                     key={idx}
                     onClick={() => setSelectedStage(selectedStage === item.stage ? null : item.stage)}
-                    className={`w-full text-left transition-all ${selectedStage === item.stage ? "ring-2 ring-blue-500 rounded" : ""}`}
+                    className={`w-full text-left transition-all ${selectedStage === item.stage ? "ring-2 ring-[#F57418] rounded" : ""}`}
                   >
                     <div className="flex items-center gap-3 mb-1">
-                      <div className="w-32 text-sm font-medium text-gray-700 truncate">{item.stage}</div>
-                      <div className="flex-1 h-12 rounded-lg overflow-hidden bg-gray-100" style={{ position: "relative" }}>
+                      <div className="w-32 text-sm font-medium text-[#000000] truncate">{item.stage}</div>
+                      <div className="flex-1 h-12 rounded-lg overflow-hidden bg-[#F5F7F8]" style={{ position: "relative" }}>
                         <div
                           className="h-full flex items-center px-3 rounded-lg transition-all"
                           style={{
@@ -241,7 +241,7 @@ export default function OperationsAnalyticsDashboard() {
                             minWidth: width > 5 ? `${width}%` : "60px",
                           }}
                         >
-                          <span className="text-xs font-bold text-gray-900 whitespace-nowrap">
+                          <span className="text-xs font-bold text-[#000000] whitespace-nowrap">
                             {item.count.toLocaleString()} ({item.percentage.toFixed(2)}%)
                           </span>
                         </div>
@@ -252,7 +252,7 @@ export default function OperationsAnalyticsDashboard() {
               })}
             </div>
             {selectedStage && (
-              <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded text-sm text-blue-800">
+              <div className="mt-4 p-3 bg-[#FEF3E7] border border-[#F57418] rounded text-sm text-[#F57418]">
                 Filtering table by: <strong>{selectedStage}</strong> <button onClick={() => setSelectedStage(null)} className="ml-2 underline">Clear</button>
               </div>
             )}
@@ -260,41 +260,41 @@ export default function OperationsAnalyticsDashboard() {
         </Card>
 
         {/* ==================== FALLOUT EXCEPTIONS TABLE ==================== */}
-        <Card className="bg-white border border-gray-200">
+        <Card className="bg-white border border-[#E5E7EB]">
           <CardHeader>
-            <CardTitle className="text-lg font-bold text-gray-900">Fallout Exceptions Registry</CardTitle>
+            <CardTitle className="text-lg font-bold text-[#000000]">Fallout Exceptions Registry</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-gray-100 border-b-2 border-gray-300">
-                    <th className="px-4 py-2 text-left font-semibold text-gray-900">Claim ID</th>
-                    <th className="px-4 py-2 text-left font-semibold text-gray-900">Date Processed</th>
-                    <th className="px-4 py-2 text-left font-semibold text-gray-900">Pipeline Step</th>
-                    <th className="px-4 py-2 text-left font-semibold text-gray-900">Failure Reason</th>
-                    <th className="px-4 py-2 text-right font-semibold text-gray-900">Amount</th>
-                    <th className="px-4 py-2 text-center font-semibold text-gray-900">OCR Confidence</th>
-                    <th className="px-4 py-2 text-center font-semibold text-gray-900">Status</th>
+                  <tr className="bg-[#FEF3E7] border-b-2 border-[#F57418]">
+                    <th className="px-4 py-2 text-left font-semibold text-[#000000]">Claim ID</th>
+                    <th className="px-4 py-2 text-left font-semibold text-[#000000]">Date Processed</th>
+                    <th className="px-4 py-2 text-left font-semibold text-[#000000]">Pipeline Step</th>
+                    <th className="px-4 py-2 text-left font-semibold text-[#000000]">Failure Reason</th>
+                    <th className="px-4 py-2 text-right font-semibold text-[#000000]">Amount</th>
+                    <th className="px-4 py-2 text-center font-semibold text-[#000000]">OCR Confidence</th>
+                    <th className="px-4 py-2 text-center font-semibold text-[#000000]">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredFalloutData.map((row, idx) => (
-                    <tr key={idx} className={`border-b border-gray-200 ${idx % 2 === 0 ? "bg-white" : "bg-gray-50"} hover:bg-blue-50`}>
-                      <td className="px-4 py-3 font-mono text-xs text-blue-600">{row.claimId}</td>
-                      <td className="px-4 py-3 text-gray-700">{row.dateProcessed}</td>
-                      <td className="px-4 py-3 text-gray-700 font-medium">{row.stage}</td>
-                      <td className="px-4 py-3 text-gray-600 max-w-md">{row.reason}</td>
-                      <td className="px-4 py-3 text-right font-semibold text-gray-900">{row.amount}</td>
+                    <tr key={idx} className={`border-b border-[#E5E7EB] ${idx % 2 === 0 ? "bg-white" : "bg-[#FAFAFA]"} hover:bg-[#FEF3E7]`}>
+                      <td className="px-4 py-3 font-mono text-xs text-[#F57418]">{row.claimId}</td>
+                      <td className="px-4 py-3 text-[#5F5F5F]">{row.dateProcessed}</td>
+                      <td className="px-4 py-3 text-[#000000] font-medium">{row.stage}</td>
+                      <td className="px-4 py-3 text-[#5F5F5F] max-w-md">{row.reason}</td>
+                      <td className="px-4 py-3 text-right font-semibold text-[#000000]">{row.amount}</td>
                       <td className="px-4 py-3">
                         <div className="flex items-center justify-center gap-2">
-                          <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="w-16 h-2 bg-[#E5E7EB] rounded-full overflow-hidden">
                             <div 
-                              className="h-full bg-emerald-500"
+                              className="h-full bg-[#F57418]"
                               style={{ width: `${row.confidence}%` }}
                             />
                           </div>
-                          <span className="text-xs font-medium text-gray-700">{row.confidence}%</span>
+                          <span className="text-xs font-medium text-[#5F5F5F]">{row.confidence}%</span>
                         </div>
                       </td>
                       <td className="px-4 py-3 text-center">
@@ -311,38 +311,31 @@ export default function OperationsAnalyticsDashboard() {
         </Card>
 
         {/* ==================== STAGE DETAIL TABLE ==================== */}
-        <Card className="bg-white border border-gray-200">
+        <Card className="bg-white border border-[#E5E7EB]">
           <CardHeader>
-            <CardTitle className="text-lg font-bold text-gray-900">Pipeline Stage Breakdown</CardTitle>
+            <CardTitle className="text-lg font-bold text-[#000000]">Pipeline Stage Breakdown</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-gray-100 border-b-2 border-gray-300">
-                    <th className="px-4 py-2 text-left font-semibold text-gray-900">Stage Order</th>
-                    <th className="px-4 py-2 text-left font-semibold text-gray-900">Stage Name</th>
-                    <th className="px-4 py-2 text-right font-semibold text-gray-900">Claims Reached</th>
-                    <th className="px-4 py-2 text-right font-semibold text-gray-900">% Reached</th>
-                    <th className="px-4 py-2 text-right font-semibold text-gray-900">Claims Dropped</th>
-                    <th className="px-4 py-2 text-right font-semibold text-gray-900">% Dropped</th>
+                  <tr className="bg-[#FEF3E7] border-b-2 border-[#F57418]">
+                    <th className="px-4 py-2 text-left font-semibold text-[#000000]">Stage Order</th>
+                    <th className="px-4 py-2 text-left font-semibold text-[#000000]">Stage Name</th>
+                    <th className="px-4 py-2 text-right font-semibold text-[#000000]">Claims Reached</th>
+                    <th className="px-4 py-2 text-right font-semibold text-[#000000]">% Reached</th>
+                    <th className="px-4 py-2 text-right font-semibold text-[#000000]">Claims Dropped</th>
+                    <th className="px-4 py-2 text-right font-semibold text-[#000000]">% Dropped</th>
                   </tr>
                 </thead>
                 <tbody>
                   {stageTableData.map((row, idx) => (
-                    <tr key={idx} className={`border-b border-gray-200 ${idx % 2 === 0 ? "bg-white" : "bg-gray-50"}`}>
-                      <td className="px-4 py-2 text-gray-700 font-medium">{row.order}</td>
-                      <td className="px-4 py-2 text-gray-900 font-medium">{row.stage}</td>
-                      <td className="px-4 py-2 text-right text-gray-900 font-semibold">{row.reached.toLocaleString()}</td>
+                    <tr key={idx} className={`border-b border-[#E5E7EB] ${idx % 2 === 0 ? "bg-white" : "bg-[#FAFAFA]"}`}>
+                      <td className="px-4 py-2 text-[#5F5F5F] font-medium">{row.order}</td>
+                      <td className="px-4 py-2 text-[#000000] font-medium">{row.stage}</td>
+                      <td className="px-4 py-2 text-right text-[#000000] font-semibold">{row.reached.toLocaleString()}</td>
                       <td className="px-4 py-2 text-right">
-                        <Badge className="bg-blue-100 text-blue-800">{row.reachedPct.toFixed(2)}%</Badge>
-                      </td>
-                      <td className="px-4 py-2 text-right text-gray-900">{row.dropped.toLocaleString()}</td>
-                      <td className="px-4 py-2 text-right">
-                        <Badge className={row.droppedPct > 5 ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"}>
-                          {row.droppedPct.toFixed(2)}%
-                        </Badge>
-                      </td>
+                        <Badge className="bg-...</td>
                     </tr>
                   ))}
                 </tbody>
